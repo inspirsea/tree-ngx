@@ -3,8 +3,7 @@ import { NodeItemIns } from '../model/node-item-ins';
 
 @Component({
   selector: 'tree-ins',
-  templateUrl: './tree-ins.component.html',
-  styleUrls: ['./tree-ins.component.scss']
+  templateUrl: './tree-ins.component.html'
 })
 export class TreeInsComponent implements OnInit {
 

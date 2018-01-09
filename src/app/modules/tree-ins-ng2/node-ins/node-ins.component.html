@@ -1,1 +1,12 @@
-{{nodeitem.name}}
+<div #unCollapsed [class.scaleTest]="!expanded" class="node-ins">
+    <span #collapsed class="node-name-ins">
+        <span (click)="expanded = !expanded">
+            <i *ngIf="expanded" class="node-icon-ins material-icons">expand_more</i>
+            <i *ngIf="!expanded" class="node-icon-ins material-icons">chevron_right</i>
+        </span>
+        {{nodeitem.name}}
+    </span>
+    <div *ngIf="expanded">
+        <node-ins class="node-offset" [parent]="_this" [nodeitem]="child" *ngFor="let child of nodeitem.children"></node-ins>
+    </div>
+</div>
