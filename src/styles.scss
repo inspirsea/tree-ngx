@@ -1,74 +1,92 @@
 /* You can add global styles to this file, and also import other style files */
 
-.scaleTest {
-    transition: all .2s ease-in-out;
-    transform: scaleY(2);
-}
-
 .tree-ins {
-    display: flex;
-    flex: 1 1 auto;
-    flex-direction: column;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
 }
 
 .node-ins {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  .node-offset {
     display: flex;
-    flex: 1 1 auto;
-    flex-direction: column;
-
-    .node-offset {
-        display: flex;
-        margin-left: 20px;
+    margin-left: 20px;
+  }
+  .node-name-ins {
+    font-size: 16px;
+    .node-icon-ins {
+      font-size: 26px;
+      position: relative;
+      top: 7px;
+      left: 4px;
     }
-
-    .node-name-ins {
-        font-size: 16px;
-        .node-icon-ins {
-            font-size: 26px;
-            position: relative;
-            top: 7px;
-            left: 4px;
-        }
-    }
+  }
 }
 
 .node-children-ins {
-    display: flex;
-    flex: 1 1 auto;
+  display: flex;
+  flex: 1 1 auto;
+}
+
+.collapsible-wrapper {
+  display: flex;
+  overflow: hidden;
+}
+
+.collapsible-wrapper:after {
+  content: '';
+  height: 30px;
+  transition: height 0.3s linear, max-height 0s 0.3s linear;
+  max-height: 0px;
+}
+
+.collapsible {
+  transition: margin-bottom 0.3s cubic-bezier(0, 0, 0, 1);
+  margin-bottom: 0;
+  max-height: 1000000px;
+}
+
+.collapsible-wrapper.collapsed>.collapsible {
+  margin-bottom: -20000px;
+  transition: margin-bottom 0.3s cubic-bezier(1, 0, 1, 1), visibility 0s 0.3s, max-height 0s 0.3s;
+  visibility: hidden;
+  max-height: 0;
+}
+
+.collapsible-wrapper.collapsed:after {
+  height: 0;
+  transition: height 0.3s linear;
+  max-height: 30px;
 }
 
 @font-face {
-    font-family: 'Material Icons';
-    font-style: normal;
-    font-weight: 400;
-    src: local('Material Icons'),
-      local('MaterialIcons-Regular'),
-      url(./assets/MaterialIcons-Regular.woff2) format('woff2'),
-      url(./assets/MaterialIcons-Regular.woff) format('woff'),
-      url(./assets/MaterialIcons-Regular.ttf) format('truetype');
-  }
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Material Icons'), local('MaterialIcons-Regular'), url(./assets/MaterialIcons-Regular.woff2) format('woff2'), url(./assets/MaterialIcons-Regular.woff) format('woff'), url(./assets/MaterialIcons-Regular.ttf) format('truetype');
+}
 
-  .material-icons {
-    font-family: 'Material Icons';
-    font-weight: normal;
-    font-style: normal;
-    font-size: 24px;  /* Preferred icon size */
-    display: inline-block;
-    line-height: 1;
-    text-transform: none;
-    letter-spacing: normal;
-    word-wrap: normal;
-    white-space: nowrap;
-    direction: ltr;
-  
-    /* Support for all WebKit browsers. */
-    -webkit-font-smoothing: antialiased;
-    /* Support for Safari and Chrome. */
-    text-rendering: optimizeLegibility;
-  
-    /* Support for Firefox. */
-    -moz-osx-font-smoothing: grayscale;
-  
-    /* Support for IE. */
-    font-feature-settings: 'liga';
-  }
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}

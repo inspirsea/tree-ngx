@@ -1,12 +1,14 @@
-<div #unCollapsed [class.scaleTest]="!expanded" class="node-ins">
-    <span #collapsed class="node-name-ins">
-        <span (click)="expanded = !expanded">
-            <i *ngIf="expanded" class="node-icon-ins material-icons">expand_more</i>
-            <i *ngIf="!expanded" class="node-icon-ins material-icons">chevron_right</i>
+<div class="node-ins">
+    <span class="node-name-ins">
+        <span (click)="collapsed = !collapsed;">
+            <i *ngIf="!collapsed" class="node-icon-ins material-icons">expand_more</i>
+            <i *ngIf="collapsed" class="node-icon-ins material-icons">chevron_right</i>
         </span>
         {{nodeitem.name}}
     </span>
-    <div *ngIf="expanded">
-        <node-ins class="node-offset" [parent]="_this" [nodeitem]="child" *ngFor="let child of nodeitem.children"></node-ins>
+    <div class="collapsible-wrapper" [class.collapsed]="collapsed">
+        <div class="collapsible">
+            <node-ins class="node-offset" [parent]="_this" [nodeitem]="child" *ngFor="let child of nodeitem.children"></node-ins>
+        </div>
     </div>
 </div>

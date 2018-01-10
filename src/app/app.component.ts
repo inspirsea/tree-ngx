@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NodeItemIns } from './modules/tree-ins-ng2/model/node-item-ins';
 
 @Component({
@@ -6,7 +6,7 @@ import { NodeItemIns } from './modules/tree-ins-ng2/model/node-item-ins';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   public items: NodeItemIns[] = [];
 
   ngOnInit() {
@@ -19,18 +19,18 @@ export class AppComponent {
         let grandChildren = [];
         for (let z = 0; z < 10; z++) {
           grandChildren.push({
-            name: "Grandchildren_" + i + "_" + j + "_" + z
+            name: 'Grandchildren_' + i + '_' + j + '_' + z
           });
         }
 
         children.push({
-          name: "Child_" + i + "_" + j,
+          name: 'Child_' + i + '_' + j,
           children: grandChildren
         });
       }
 
       this.items.push({
-        name: "Root_" + i,
+        name: 'Root_' + i,
         children: children
       });
     }
