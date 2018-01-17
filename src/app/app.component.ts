@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NodeItemIns } from './modules/tree-ins-ng2/model/node-item-ins';
+import { NodeItem } from './modules/tree-ins-ng2/model/node-item';
+import { TreeCallbacks } from './modules/tree-ins-ng2/model/tree-callbacks';
+import { TreeOptions } from './modules/tree-ins-ng2/model/tree-options';
+import { TreeMode } from './modules/tree-ins-ng2/model/tree-mode';
 
 @Component({
   selector: 'app-root',
@@ -7,10 +10,13 @@ import { NodeItemIns } from './modules/tree-ins-ng2/model/node-item-ins';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  public items: NodeItemIns[] = [];
+  public items: NodeItem<string>[] = [];
+  public selectedItems: any[];
+  public callbacks: TreeCallbacks;
+  public options: TreeOptions;
 
   ngOnInit() {
-
+    let roots = [];
     for (let i = 0; i < 25; i++) {
 
       let children = [];
@@ -18,21 +24,46 @@ export class AppComponent implements OnInit {
 
         let grandChildren = [];
         for (let z = 0; z < 10; z++) {
+          if (i === 0 && j === 0) {
+            z = 10;
+          }
           grandChildren.push({
-            name: 'Grandchildren_' + i + '_' + j + '_' + z
+            name: 'Grandchildren_' + i + '_' + j + '_' + z,
+            item: 'gchild' + i + '_' + j + '_' + z
           });
         }
 
         children.push({
           name: 'Child_' + i + '_' + j,
-          children: grandChildren
+          children: grandChildren,
+          item: 'child'
         });
       }
 
-      this.items.push({
+      roots.push({
         name: 'Root_' + i,
-        children: children
+        children: children,
+        item: 'Root'
       });
     }
+
+    this.items.push({
+      name: 'All',
+      children: roots,
+      item: 'All'
+    });
+
+    this.callbacks = {
+      nameClick: this.onNameClick
+    };
+
+    this.options = {
+      checkboxes: false,
+      mode: TreeMode.SingleSelect
+    };
+  }
+
+  private onNameClick(item: NodeItem<any>) {
+    item.name += 'I';
   }
 }

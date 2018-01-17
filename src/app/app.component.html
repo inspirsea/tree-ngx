@@ -1,1 +1,12 @@
-<tree-ins [nodeitems]="items"></tree-ins>
+<div style="display: flex; flex: 1 1; flex-direction: row">
+  <div style="display: flex; flex: 1 1; flex-direction: row">
+    <tree-ins (selectedItems)="selectedItems = $event" [nodeItems]="items" [callbacks]="callbacks" [options]="options">
+      <ng-template #nodeNameTemplate let-node>
+        {{node.name}}
+      </ng-template>
+    </tree-ins>
+  </div>
+  <div style="display: flex; flex: 1 1; flex-direction: row">
+    {{selectedItems | json}}
+  </div>
+</div>

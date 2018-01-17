@@ -1,0 +1,30 @@
+.collapsible-wrapper {
+    display: flex;
+    overflow: hidden;
+  }
+  
+  .collapsible-wrapper:after {
+    content: '';
+    height: 25px;
+    transition: height 0.3s linear, max-height 0s 0.3s linear;
+    max-height: 0px;
+  }
+  
+  .collapsible {
+    transition: margin-bottom 0.3s cubic-bezier(0, 0, 0, 1);
+    margin-bottom: 0;
+    max-height: 1000000px;
+  }
+  
+  .collapsible-wrapper.collapsed>.collapsible {
+    margin-bottom: -20000px;
+    transition: margin-bottom 0.3s cubic-bezier(1, 0, 1, 1), visibility 0s 0.3s, max-height 0s 0.3s;
+    visibility: hidden;
+    max-height: 0;
+  }
+  
+  .collapsible-wrapper.collapsed:after {
+    height: 0;
+    transition: height 0.3s linear;
+    max-height: 25px;
+  }

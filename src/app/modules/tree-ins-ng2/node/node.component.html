@@ -1,0 +1,23 @@
+<div class="node">
+  <div class="node-container">
+    <div class="node-icon-wrapper">
+      <span *ngIf="collapseVisible" (click)="collapsed = !collapsed;">
+        <i *ngIf="!collapsed" class="node-icon material-icons">expand_more</i>
+        <i *ngIf="collapsed" class="node-icon material-icons">chevron_right</i>
+      </span>
+    </div>
+    
+    <input #nodeCheckbox class="node-checkbox" *ngIf="showCheckBox" (click)="toggleSelected()" [checked]="selected" type="checkbox" />
+    <div (click)="onNameClick()" [class.markSelected]="markSelected && selected" class="node-name">
+      <ng-container *ngIf="!nodeNameTemplate">{{nodeItem.name}}</ng-container>
+      <ng-container *ngTemplateOutlet="nodeNameTemplate; context: {$implicit: nodeItem}">
+      </ng-container>
+    </div>
+  </div>
+  <div *ngIf="nodeItem.children" class="collapsible-wrapper" [class.collapsed]="collapsed">
+    <div class="collapsible">
+      <node #nodeChild class="node-offset" [parent]="_this" [nodeItem]="child" [nodeNameTemplate]="nodeNameTemplate" [callbacks]="callbacks" [options]="options"
+        *ngFor="let child of nodeItem.children"></node>
+    </div>
+  </div>
+</div>

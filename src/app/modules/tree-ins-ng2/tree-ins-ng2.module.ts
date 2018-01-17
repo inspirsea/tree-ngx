@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TreeInsComponent } from './tree-ins/tree-ins.component';
-import { NodeInsComponent } from './node-ins/node-ins.component';
+import { NodeComponent } from './node/node.component';
+import { TreeService } from './service/tree-service';
 
 @NgModule({
   imports: [
@@ -9,10 +10,13 @@ import { NodeInsComponent } from './node-ins/node-ins.component';
   ],
   declarations: [
     TreeInsComponent,
-    NodeInsComponent
+    NodeComponent
   ],
   exports: [
     TreeInsComponent
+  ],
+  providers: [
+    TreeService
   ]
 })
 export class TreeInsNg2Module { }
