@@ -78,7 +78,7 @@ export class NodeComponent implements OnInit, OnChanges {
       this.callbacks.nameClick(this.nodeItem);
     }
 
-    if (this.options.checkboxes === false) {
+    if (this.canToggleChildrenOnName()) {
       this.toggleSelected();
     }
   }
@@ -146,6 +146,18 @@ export class NodeComponent implements OnInit, OnChanges {
     return this.nodeChildren.toArray().every(it => it.selectedState === NodeSelectedState.checked);
   }
 
+  private canToggleChildrenOnName() {
+    if (this.options.checkboxes === false) {
+      if (this.options.mode === TreeMode.SingleSelect && !this.nodeItem.children) {
+        return true;
+      } else if (this.options.mode === TreeMode.MultiSelect) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   private setCollapseVisible() {
     if (this.nodeItem.children) {
       if (this.nodeItem.children.length > 0) {
@@ -157,7 +169,7 @@ export class NodeComponent implements OnInit, OnChanges {
   }
 
   private setCheckBoxVisible() {
-    
+
     if (this.nodeItem.children && this.options.mode === TreeMode.SingleSelect
       || !this.options.checkboxes) {
       this.showCheckBox = false;

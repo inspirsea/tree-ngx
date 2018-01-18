@@ -38,6 +38,11 @@ export class AppComponent implements OnInit {
           children: grandChildren,
           item: 'child'
         });
+
+        children.push({
+          name: 'Child_' + i + '_' + j,
+          item: 'child'
+        });
       }
 
       roots.push({
@@ -58,8 +63,8 @@ export class AppComponent implements OnInit {
     };
 
     this.options = {
-      checkboxes: true,
-      mode: TreeMode.SingleSelect
+      checkboxes: false,
+      mode: TreeMode.MultiSelect
     };
   }
 

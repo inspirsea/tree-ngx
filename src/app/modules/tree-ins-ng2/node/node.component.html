@@ -1,4 +1,4 @@
-<div class="node" [class.leaf]="!nodeItem.children">
+<div class="node">
   <div class="node-container">
     <div class="node-icon-wrapper">
       <span *ngIf="collapseVisible" (click)="collapsed = !collapsed;">
@@ -8,7 +8,7 @@
     </div>
     
     <input #nodeCheckbox class="node-checkbox" *ngIf="showCheckBox" (click)="toggleSelected()" [checked]="selected" type="checkbox" />
-    <div (click)="onNameClick()" [class.markSelected]="markSelected && selected" class="node-name">
+    <div (click)="onNameClick()" [class.markSelected]="markSelected && selected" [class.hasCheckBox]="showCheckBox" class="node-name">
       <ng-container *ngIf="!nodeNameTemplate">{{nodeItem.name}}</ng-container>
       <ng-container *ngTemplateOutlet="nodeNameTemplate; context: {$implicit: nodeItem}">
       </ng-container>
