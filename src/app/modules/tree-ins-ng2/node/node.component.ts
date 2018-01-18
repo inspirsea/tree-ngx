@@ -30,7 +30,6 @@ export class NodeComponent implements OnInit, OnChanges {
   public selectedState: NodeSelectedState = NodeSelectedState.unChecked;
   public selected: boolean;
   public showCheckBox: boolean;
-  
 
   constructor(private treeService: TreeService) { }
 
@@ -40,6 +39,7 @@ export class NodeComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.setCheckBoxVisible();
+    this.setMarkSelected();
   }
 
   public toggleSelected() {
@@ -157,7 +157,9 @@ export class NodeComponent implements OnInit, OnChanges {
   }
 
   private setCheckBoxVisible() {
-    if (this.nodeItem.children && this.options.mode === TreeMode.SingleSelect || this.options.checkboxes === false) {
+    
+    if (this.nodeItem.children && this.options.mode === TreeMode.SingleSelect
+      || !this.options.checkboxes) {
       this.showCheckBox = false;
     } else {
       this.showCheckBox = true;
@@ -165,7 +167,11 @@ export class NodeComponent implements OnInit, OnChanges {
   }
 
   private setMarkSelected() {
-    
+    if (!this.nodeItem.children && !this.options.checkboxes) {
+      this.markSelected = true;
+    } else {
+      this.markSelected = false;
+    }
   }
 
 }

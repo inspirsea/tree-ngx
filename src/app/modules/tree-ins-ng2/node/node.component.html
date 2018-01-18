@@ -1,4 +1,4 @@
-<div class="node">
+<div class="node" [class.leaf]="!nodeItem.children">
   <div class="node-container">
     <div class="node-icon-wrapper">
       <span *ngIf="collapseVisible" (click)="collapsed = !collapsed;">

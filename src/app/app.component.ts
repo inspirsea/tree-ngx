@@ -58,7 +58,7 @@ export class AppComponent implements OnInit {
     };
 
     this.options = {
-      checkboxes: false,
+      checkboxes: true,
       mode: TreeMode.SingleSelect
     };
   }

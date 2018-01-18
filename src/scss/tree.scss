@@ -1,52 +1,47 @@
 .tree-ins {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+
+.node {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  .node-offset {
     display: flex;
-    flex: 1 1 auto;
-    flex-direction: column;
+    margin-left: 20px;
   }
-  
-  .node {
-    display: flex;
-    flex: 1 1 auto;
-    flex-direction: column;
-    .node-offset {
-      display: flex;
-      margin-left: 20px;
-    }
-    .node-container {
+  .node-container {
+    display: inline-block; //Empty container to align nodes with no collapse
+    .node-icon-wrapper {
+      cursor: pointer;
       display: inline-block;
-  
-      //Empty container to align nodes with no collapse
-      .node-icon-wrapper {
-        cursor: pointer;
-        display: inline;
-        width: 26px;
-        height: 20px;
-        .node-icon {
-          font-size: 26px;
-          position: relative;
-          top: 6px;
-          left: 7px;
-        }
+      position: relative;
+      width: 20px;
+      height: 18px;
+      .node-icon {
+        font-size: 26px;
+        position: absolute;
+        top: -2px;
+        left: 4px;
       }
-
-      .node-name {
-        display: inline-block;
-        font-size: 16px;
-        cursor: pointer;
-        padding: 4px 8px;
-
-        &.markSelected {
-          padding: 3px 7px;
-          border: 1px solid #ccc;
-          background-color: #fefefe;
-        }
+    }
+    .node-name {
+      display: inline-block;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 4px 8px;
+      &.markSelected {
+        color: white;
+        background-color: #226699;
+        border-radius: 3px;
       }
     }
   }
-  
-  .node-children {
-    display: flex;
-    flex: 1 1 auto;
-  }
-  
-  
+}
+
+.node-children {
+  display: flex;
+  flex: 1 1 auto;
+}
