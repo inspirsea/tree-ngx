@@ -5,10 +5,31 @@ import { NodeItem } from '../model/node-item';
 import { NodeSelectedState } from '../model/node-selected-state';
 import { TreeService } from '../service/tree-service';
 import { TreeMode } from '../model/tree-mode';
+import { TreeOptions } from '../model/tree-options';
 
 describe('NodeInsComponent', () => {
   let component: NodeComponent;
   let fixture: ComponentFixture<NodeComponent>;
+
+  let multiCheckbox = {
+    checkboxes: true,
+    mode: TreeMode.MultiSelect
+  } as TreeOptions;
+
+  let singleCheckbox = {
+    checkboxes: true,
+    mode: TreeMode.MultiSelect
+  } as TreeOptions;
+
+  let multi = {
+    checkboxes: false,
+    mode: TreeMode.MultiSelect
+  } as TreeOptions;
+
+  let single = {
+    checkboxes: false,
+    mode: TreeMode.MultiSelect
+  } as TreeOptions;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -45,7 +66,7 @@ describe('NodeInsComponent', () => {
     component.ngOnChanges();
   });
 
-  it('should create', () => {
+  it('Should create', () => {
     expect(component).toBeTruthy();
   });
 
@@ -92,25 +113,19 @@ describe('NodeInsComponent', () => {
 
   it('Single select', () => {
 
-    component.options = {
-      checkboxes: true,
-      mode: TreeMode.SingleSelect
-    };
+    component.options = singleCheckbox;
 
     component.ngOnChanges();
 
     fixture.detectChanges();
 
-    expect(component.nodeCheckbox).toBeUndefined();
+    expect(component.nodeCheckbox).toBeDefined();
     
   });
 
-  it('Multi select no checkbox', () => {
+  it('Multi select, no checkbox shown', () => {
 
-    component.options = {
-      checkboxes: false,
-      mode: TreeMode.MultiSelect
-    };
+    component.options = multi;
 
     component.ngOnChanges();
 
