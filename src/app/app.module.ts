@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
@@ -11,6 +12,7 @@ import { TreeInsNg2Module } from './modules/tree-ins-ng2/tree-ins-ng2.module';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     TreeInsNg2Module
   ],
   providers: [],

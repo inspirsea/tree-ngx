@@ -143,7 +143,8 @@ export class NodeComponent implements OnInit, OnChanges {
   }
 
   private allChildrenSelected() {
-    return this.nodeChildren.toArray().every(it => it.selectedState === NodeSelectedState.checked);
+    return this.nodeChildren.toArray().every(it => it.selectedState === NodeSelectedState.checked)
+    && this.nodeChildren.length === this.nodeItem.children.length;
   }
 
   private canToggleChildrenOnName() {
@@ -169,7 +170,6 @@ export class NodeComponent implements OnInit, OnChanges {
   }
 
   private setCheckBoxVisible() {
-
     if (this.nodeItem.children && this.options.mode === TreeMode.SingleSelect
       || !this.options.checkboxes) {
       this.showCheckBox = false;
@@ -185,5 +185,4 @@ export class NodeComponent implements OnInit, OnChanges {
       this.markSelected = false;
     }
   }
-
 }

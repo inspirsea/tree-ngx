@@ -1,12 +1,23 @@
+<div>
+    <button (click)="addNode()">addNode</button><input type="text" [(ngModel)]="currentId">
+</div>
 <div style="display: flex; flex: 1 1; flex-direction: row">
   <div style="display: flex; flex: 1 1; flex-direction: row">
-    <tree-ins (selectedItems)="selectedItems = $event" [nodeItems]="items" [callbacks]="callbacks" [options]="options">
+    <tree-ins #firstTreeRef (selectedItems)="firstSelectedItems = $event" [nodeItems]="firstTree" [callbacks]="firstTreecallbacks" [options]="firstTreeoptions">
       <ng-template #nodeNameTemplate let-node>
         {{node.name}}
+        id: {{node.id}}
       </ng-template>
     </tree-ins>
   </div>
   <div style="display: flex; flex: 1 1; flex-direction: row">
-    {{selectedItems | json}}
+    <tree-ins #secondTreeRef (selectedItems)="secondSelectedItems = $event" [nodeItems]="secondTree" [callbacks]="secondTreecallbacks" [options]="secondTreeoptions">
+    </tree-ins>
+  </div>
+  <div style="display: flex; flex: 1 1; flex-direction: row">
+    {{firstSelectedItems | json}}
+  </div>
+  <div style="display: flex; flex: 1 1; flex-direction: row">
+    {{secondSelectedItems | json}}
   </div>
 </div>

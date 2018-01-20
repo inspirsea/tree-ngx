@@ -1,9 +1,9 @@
 <div class="node">
   <div class="node-container">
     <div class="node-icon-wrapper">
-      <span *ngIf="collapseVisible" (click)="collapsed = !collapsed;">
-        <i *ngIf="!collapsed" class="node-icon material-icons">expand_more</i>
-        <i *ngIf="collapsed" class="node-icon material-icons">chevron_right</i>
+      <span *ngIf="collapseVisible" [class.iconCheckbox]="showCheckBox" class="node-icon" (click)="collapsed = !collapsed;">
+        <i *ngIf="!collapsed" class="material-icons">expand_more</i>
+        <i *ngIf="collapsed" class="material-icons">chevron_right</i>
       </span>
     </div>
     
