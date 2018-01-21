@@ -24,7 +24,7 @@ export class NodeComponent implements OnInit, OnChanges {
   @Input() options: TreeOptions;
 
   public _this = this;
-  public collapsed = false;
+  public expanded = true;
   public markSelected = false;
   public collapseVisible;
   public selectedState: NodeSelectedState = NodeSelectedState.unChecked;
@@ -35,6 +35,7 @@ export class NodeComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.setCollapseVisible();
+    this.setInitialExpandedValue(this.nodeItem.expanded);
   }
 
   ngOnChanges() {
@@ -80,6 +81,23 @@ export class NodeComponent implements OnInit, OnChanges {
 
     if (this.canToggleChildrenOnName()) {
       this.toggleSelected();
+    }
+  }
+
+  public deleteChild(nodeItem: NodeItem<any>) {
+    let index = this.nodeItem.children.indexOf(nodeItem);
+
+    if (index !== -1) {
+      this.treeService.unSelect(this.nodeItem.item, this);
+      this.nodeItem.children.splice(index, 1);
+    }
+  }
+
+  public delete() {
+    if (this.parent) {
+      this.parent.deleteChild(this.nodeItem);
+    } else {
+      this.treeService.deleteRoot(this.nodeItem);
     }
   }
 
@@ -144,7 +162,7 @@ export class NodeComponent implements OnInit, OnChanges {
 
   private allChildrenSelected() {
     return this.nodeChildren.toArray().every(it => it.selectedState === NodeSelectedState.checked)
-    && this.nodeChildren.length === this.nodeItem.children.length;
+      && this.nodeChildren.length === this.nodeItem.children.length;
   }
 
   private canToggleChildrenOnName() {
@@ -183,6 +201,12 @@ export class NodeComponent implements OnInit, OnChanges {
       this.markSelected = true;
     } else {
       this.markSelected = false;
+    }
+  }
+
+  private setInitialExpandedValue(value: boolean) {
+    if (value != null) {
+      this.expanded = value;
     }
   }
 }

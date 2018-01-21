@@ -19,6 +19,7 @@ import { TreeCallbacks } from '../model/tree-callbacks';
 import { TreeMode } from '../model/tree-mode';
 import { ISubscription } from 'rxjs/Subscription';
 import { NodeComponent } from '../node/node.component';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'tree-ins',
@@ -59,12 +60,24 @@ export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  public connect() {
+  public connect(): Observable<any[]> {
     return this.treeService.connect();
   }
 
   public addNodeById(nodeItem: NodeItem<any>, id: string) {
     this.treeService.addNodeById(nodeItem, id);
+  }
+
+  public deleteById(id: string) {
+    this.treeService.deleteById(id);
+  }
+
+  public expandAll() {
+    this.treeService.expandAll();
+  }
+
+  public collapseAll() {
+    this.treeService.collapseAll();
   }
 
   ngOnDestroy() {

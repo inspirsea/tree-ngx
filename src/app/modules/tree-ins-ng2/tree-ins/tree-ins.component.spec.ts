@@ -46,14 +46,17 @@ describe('TreeInsComponent', () => {
       id: '1',
       name: 'test1',
       item: 'root',
+      expanded: false,
       children: [{
         id: '2',
         name: 'child',
         item: 'item1',
+        expanded: true,
         children: [{
           id: '3',
           name: 'child',
-          item: 'item1'
+          item: 'item1',
+          expanded: false,
         }]
       },
       {
@@ -148,5 +151,36 @@ describe('TreeInsComponent', () => {
     fixture.detectChanges();
 
     expect(component.nodeItems[0].children[0].children[1] === testItem);
+  });
+
+  it('CollapseAll', () => {
+
+    component.collapseAll();
+    fixture.detectChanges();
+
+    expect(component.nodeChildren.toArray()[0].expanded).toBeFalsy();
+    expect(component.nodeChildren.toArray()[0].nodeChildren.toArray()[0].expanded).toBeFalsy();
+    
+  });
+
+  it('ExpandAll', () => {
+
+    component.expandAll();
+    fixture.detectChanges();
+
+    expect(component.nodeChildren.toArray()[0].expanded).toBeTruthy();
+    expect(component.nodeChildren.toArray()[0].nodeChildren.toArray()[0].expanded).toBeTruthy();
+    
+  });
+
+  it('DeleteById', () => {
+
+    expect(component.nodeItems[0].children[0].children.length).toEqual(1);
+
+    component.deleteById('3');
+
+    fixture.detectChanges();
+
+    expect(component.nodeItems[0].children[0].children.length).toEqual(0);
   });
 });

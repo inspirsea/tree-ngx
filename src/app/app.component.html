@@ -1,12 +1,15 @@
 <div>
-    <button (click)="addNode()">addNode</button><input type="text" [(ngModel)]="currentId">
+    <button (click)="addNode()">addNode</button><button (click)="deleteNode()">deleteNode</button><input type="text" [(ngModel)]="currentId">
+    <button (click)="firstTreeRef.expandAll()">ExpandAll</button>
+    <button (click)="firstTreeRef.collapseAll()">CollapseAll</button>
 </div>
 <div style="display: flex; flex: 1 1; flex-direction: row">
   <div style="display: flex; flex: 1 1; flex-direction: row">
     <tree-ins #firstTreeRef (selectedItems)="firstSelectedItems = $event" [nodeItems]="firstTree" [callbacks]="firstTreecallbacks" [options]="firstTreeoptions">
-      <ng-template #nodeNameTemplate let-node>
+      <ng-template #nodeNameTemplate let-node="node" let-context="context">
         {{node.name}}
         id: {{node.id}}
+        <span (click)="context.delete()">delete</span>
       </ng-template>
     </tree-ins>
   </div>

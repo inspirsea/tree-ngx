@@ -1,23 +1,23 @@
 <div class="node">
   <div class="node-container">
     <div class="node-icon-wrapper">
-      <span *ngIf="collapseVisible" [class.iconCheckbox]="showCheckBox" class="node-icon" (click)="collapsed = !collapsed;">
-        <i *ngIf="!collapsed" class="material-icons">expand_more</i>
-        <i *ngIf="collapsed" class="material-icons">chevron_right</i>
+      <span *ngIf="collapseVisible" [class.iconCheckbox]="showCheckBox" class="node-icon" (click)="expanded = !expanded;">
+        <i *ngIf="!expanded" class="material-icons">expand_more</i>
+        <i *ngIf="expanded" class="material-icons">chevron_right</i>
       </span>
     </div>
-    
+
     <input #nodeCheckbox class="node-checkbox" *ngIf="showCheckBox" (click)="toggleSelected()" [checked]="selected" type="checkbox" />
     <div (click)="onNameClick()" [class.markSelected]="markSelected && selected" [class.hasCheckBox]="showCheckBox" class="node-name">
       <ng-container *ngIf="!nodeNameTemplate">{{nodeItem.name}}</ng-container>
-      <ng-container *ngTemplateOutlet="nodeNameTemplate; context: {$implicit: nodeItem}">
+      <ng-container *ngTemplateOutlet="nodeNameTemplate; context: { $implicit: nodeItem, node: nodeItem, context: _this }">
       </ng-container>
     </div>
   </div>
-  <div *ngIf="nodeItem.children" class="collapsible-wrapper" [class.collapsed]="collapsed">
+  <div *ngIf="nodeItem.children" class="collapsible-wrapper" [class.collapsed]="!expanded">
     <div class="collapsible">
-      <node #nodeChild class="node-offset" [parent]="_this" [nodeItem]="child" [nodeNameTemplate]="nodeNameTemplate" [callbacks]="callbacks" [options]="options"
-        *ngFor="let child of nodeItem.children"></node>
+      <node #nodeChild class="node-offset" [parent]="_this" [nodeItem]="child" [nodeNameTemplate]="nodeNameTemplate" [callbacks]="callbacks"
+        [options]="options" *ngFor="let child of nodeItem.children"></node>
     </div>
   </div>
 </div>

@@ -43,14 +43,17 @@ describe('NodeInsComponent', () => {
     fixture = TestBed.createComponent(NodeComponent);
     component = fixture.componentInstance;
     component.nodeItem = {
+      id: '1',
       name: 'test',
       item: 'testItem',
       children: [
         {
+          id: '2',
           name: 'test1',
           item: 'child1',
         },
         {
+          id: '3',
           name: 'test2',
           item: 'child2',
         }

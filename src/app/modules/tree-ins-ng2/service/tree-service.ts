@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { NodeItem } from '../model/node-item';
 import { NodeComponent } from '../node/node.component';
 import { TreeInsComponent } from '../tree-ins/tree-ins.component';
+import { Observable } from 'rxjs/Observable';
 
 
 @Injectable()
@@ -52,8 +53,51 @@ export class TreeService {
         }
     }
 
+    public deleteRoot(nodeItem: NodeItem<any>) {
+        let context = this.root.nodeChildren.toArray().find(it => it.nodeItem === nodeItem);
+
+        if (context) {
+            this.unSelect(context.nodeItem.item, context);
+            let index = this.root.nodeItems.indexOf(nodeItem);
+
+            if (index !== -1) {
+                this.root.nodeItems.splice(index, 1);
+            }
+        }
+    }
+
+    public deleteById(id: string) {
+        let result = this.getNodeItem(this.root, id, this.findById);
+        result.delete();
+    }
+
     public setRoot(root: TreeInsComponent) {
         this.root = root;
+    }
+
+    public expandAll() {
+        this.executeOnParents(this.root.nodeChildren.toArray(), this.expand);
+    }
+
+    public collapseAll() {
+        this.executeOnParents(this.root.nodeChildren.toArray(), this.collapse);
+    }
+
+    private collapse(node: NodeComponent) {
+        node.expanded = false;
+    }
+
+    private expand(node: NodeComponent) {
+        node.expanded = true;
+    }
+
+    private executeOnParents(children: NodeComponent[], action: (node: NodeComponent) => void) {
+        for (let child of children) {
+            if (child.nodeItem.children) {
+                action(child);
+                this.executeOnParents(child.nodeChildren.toArray(), action);
+            }
+        }
     }
 
     private findById(node: NodeComponent, arg: string) {

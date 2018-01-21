@@ -3,4 +3,5 @@ export interface NodeItem<T> {
     item: T;
     id?: string;
     children?: NodeItem<any>[];
+    expanded?: boolean;
 }

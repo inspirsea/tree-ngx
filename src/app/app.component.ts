@@ -66,6 +66,10 @@ export class AppComponent implements OnInit {
     this.secondTreeRef.addNodeById(item, this.currentId);
   }
 
+  public deleteNode() {
+    this.firstTreeRef.deleteById(this.currentId);
+  }
+
   private createTree() {
     let id = 0;
     let roots = [];
@@ -82,7 +86,8 @@ export class AppComponent implements OnInit {
           grandChildren.push({
             id: (++id).toString(),
             name: 'Grandchildren_' + i + '_' + j + '_' + z,
-            item: 'gchild' + i + '_' + j + '_' + z
+            item: 'gchild' + i + '_' + j + '_' + z,
+            expanded: false
           });
         }
 
@@ -104,7 +109,8 @@ export class AppComponent implements OnInit {
         id: (++id).toString(),
         name: 'Root_' + i,
         children: children,
-        item: 'Root'
+        item: 'Root',
+        expanded: true
       });
     }
 
@@ -112,7 +118,8 @@ export class AppComponent implements OnInit {
       id: (++id).toString(),
       name: 'All',
       children: roots,
-      item: 'All'
+      item: 'All',
+      expanded: true
     };
   }
 
