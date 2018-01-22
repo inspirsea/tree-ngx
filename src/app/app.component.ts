@@ -24,6 +24,7 @@ export class AppComponent implements OnInit {
   public secondTreecallbacks: TreeCallbacks;
   public secondTreeoptions: TreeOptions;
   public secondSelectedItems: any[];
+  public filter = '';
 
   public currentId: string;
 

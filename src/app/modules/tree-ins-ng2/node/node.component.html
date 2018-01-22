@@ -14,10 +14,10 @@
       </ng-container>
     </div>
   </div>
-  <div *ngIf="nodeItem.children" class="collapsible-wrapper" [class.collapsed]="!expanded">
+  <div *ngIf="nodeItem.children" class="collapsible-wrapper" [class.collapsed]="!expanded && filteredChildren.length > 0">
     <div class="collapsible">
       <node #nodeChild class="node-offset" [parent]="_this" [nodeItem]="child" [nodeNameTemplate]="nodeNameTemplate" [callbacks]="callbacks"
-        [options]="options" *ngFor="let child of nodeItem.children"></node>
+        [options]="options" *ngFor="let child of filteredChildren"></node>
     </div>
   </div>
 </div>

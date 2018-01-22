@@ -17,7 +17,7 @@ import { TreeService } from '../service/tree-service';
 import { TreeOptions } from '../model/tree-options';
 import { TreeCallbacks } from '../model/tree-callbacks';
 import { TreeMode } from '../model/tree-mode';
-import { ISubscription } from 'rxjs/Subscription';
+import { ISubscription, Subscription } from 'rxjs/Subscription';
 import { NodeComponent } from '../node/node.component';
 import { Observable } from 'rxjs/Observable';
 
@@ -41,6 +41,7 @@ export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
   @Input() options: TreeOptions = this.defaultOptions;
   @Input() callbacks: TreeCallbacks = {};
   @Input() nodeItems: NodeItem<any>[];
+  @Input() filter = '';
   @Output() selectedItems = new EventEmitter<any>();
 
   constructor(private treeService: TreeService) {
@@ -54,9 +55,17 @@ export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
     this.treeService.setRoot(this);
   }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes.nodeItems) {
       this.treeService.setNodeItems(this.nodeItems);
+    }
+
+    if (changes.filter) {
+      this.treeService.filterChanged(this.filter.toLowerCase());
     }
   }
 
@@ -79,9 +88,4 @@ export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
   public collapseAll() {
     this.treeService.collapseAll();
   }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
-
 }

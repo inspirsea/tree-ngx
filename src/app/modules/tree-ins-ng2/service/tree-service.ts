@@ -4,7 +4,10 @@ import { NodeItem } from '../model/node-item';
 import { NodeComponent } from '../node/node.component';
 import { TreeInsComponent } from '../tree-ins/tree-ins.component';
 import { Observable } from 'rxjs/Observable';
-
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/delay';
+import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class TreeService {
@@ -12,10 +15,23 @@ export class TreeService {
     private selectedContexts: NodeComponent[] = [];
     private selectedItems: any[] = [];
     private selectedItemsSubject = new BehaviorSubject(this.selectedItems);
+    private filterChangeSubject = new BehaviorSubject('');
+    private debounceFilterChange = new Subject<string>();
     private nodeItems: NodeItem<any>[];
     private root: TreeInsComponent;
 
     constructor() {
+        this.debounceFilterChange.debounceTime(300).distinctUntilChanged().subscribe(it => {
+            this.filterChangeSubject.next(it);
+        });
+    }
+
+    public connectFilterOnChange() {
+        return this.filterChangeSubject.asObservable();
+    }
+
+    public filterChanged(value: string) {
+        this.debounceFilterChange.next(value);
     }
 
     public connect() {

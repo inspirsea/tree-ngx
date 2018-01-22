@@ -1,4 +1,15 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, ViewChildren, QueryList, TemplateRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  ElementRef,
+  ViewChildren,
+  QueryList,
+  TemplateRef,
+  OnChanges,
+  OnDestroy
+} from '@angular/core';
 import { NodeItem } from '../model/node-item';
 import { Observable } from 'rxjs/Observable';
 import { NodeSelectedState } from '../model/node-selected-state';
@@ -6,13 +17,13 @@ import { TreeService } from '../service/tree-service';
 import { TreeCallbacks } from '../model/tree-callbacks';
 import { TreeOptions } from '../model/tree-options';
 import { TreeMode } from '../model/tree-mode';
-import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'node',
   templateUrl: './node.component.html'
 })
-export class NodeComponent implements OnInit, OnChanges {
+export class NodeComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild('nodeCheckbox') nodeCheckbox: ElementRef;
   @ViewChildren('nodeChild') nodeChildren: QueryList<NodeComponent>;
@@ -30,10 +41,13 @@ export class NodeComponent implements OnInit, OnChanges {
   public selectedState: NodeSelectedState = NodeSelectedState.unChecked;
   public selected: boolean;
   public showCheckBox: boolean;
+  public filteredChildren: any[];
+  private filterChangeSubscription: Subscription;
 
   constructor(private treeService: TreeService) { }
 
   ngOnInit() {
+    this.connectToFilterOnChange();
     this.setCollapseVisible();
     this.setInitialExpandedValue(this.nodeItem.expanded);
   }
@@ -41,6 +55,12 @@ export class NodeComponent implements OnInit, OnChanges {
   ngOnChanges() {
     this.setCheckBoxVisible();
     this.setMarkSelected();
+  }
+
+  ngOnDestroy() {
+    if (this.filterChangeSubscription) {
+      this.filterChangeSubscription.unsubscribe();
+    }
   }
 
   public toggleSelected() {
@@ -208,5 +228,17 @@ export class NodeComponent implements OnInit, OnChanges {
     if (value != null) {
       this.expanded = value;
     }
+  }
+
+  private connectToFilterOnChange() {
+    if (this.nodeItem.children) {
+      this.filterChangeSubscription = this.treeService.connectFilterOnChange().subscribe(value => {
+        this.filteredChildren = this.filter(this.nodeItem.children, value);
+      });
+    }
+  }
+
+  private filter(items: NodeItem<any>[], value: string) {
+    return items.filter(it => it.children || value === '' || it.name.toLowerCase().indexOf(value) !== -1);
   }
 }

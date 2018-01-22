@@ -2,10 +2,11 @@
     <button (click)="addNode()">addNode</button><button (click)="deleteNode()">deleteNode</button><input type="text" [(ngModel)]="currentId">
     <button (click)="firstTreeRef.expandAll()">ExpandAll</button>
     <button (click)="firstTreeRef.collapseAll()">CollapseAll</button>
+    <input type="text" [(ngModel)]="filter">
 </div>
 <div style="display: flex; flex: 1 1; flex-direction: row">
   <div style="display: flex; flex: 1 1; flex-direction: row">
-    <tree-ins #firstTreeRef (selectedItems)="firstSelectedItems = $event" [nodeItems]="firstTree" [callbacks]="firstTreecallbacks" [options]="firstTreeoptions">
+    <tree-ins #firstTreeRef (selectedItems)="firstSelectedItems = $event" [filter]="filter" [nodeItems]="firstTree" [callbacks]="firstTreecallbacks" [options]="firstTreeoptions">
       <ng-template #nodeNameTemplate let-node="node" let-context="context">
         {{node.name}}
         id: {{node.id}}
@@ -14,7 +15,7 @@
     </tree-ins>
   </div>
   <div style="display: flex; flex: 1 1; flex-direction: row">
-    <tree-ins #secondTreeRef (selectedItems)="secondSelectedItems = $event" [nodeItems]="secondTree" [callbacks]="secondTreecallbacks" [options]="secondTreeoptions">
+    <tree-ins #secondTreeRef (selectedItems)="secondSelectedItems = $event" [filter]="filter" [nodeItems]="secondTree" [callbacks]="secondTreecallbacks" [options]="secondTreeoptions">
     </tree-ins>
   </div>
   <div style="display: flex; flex: 1 1; flex-direction: row">
