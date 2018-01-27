@@ -1,9 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NodeItem } from './modules/tree-ins-ng2/model/node-item';
-import { TreeCallbacks } from './modules/tree-ins-ng2/model/tree-callbacks';
-import { TreeOptions } from './modules/tree-ins-ng2/model/tree-options';
-import { TreeMode } from './modules/tree-ins-ng2/model/tree-mode';
-import { TreeInsComponent } from './modules/tree-ins-ng2/tree-ins/tree-ins.component';
+import { TreeInsComponent, NodeItem, TreeCallbacks, TreeOptions, TreeMode } from './modules/tree-ngx';
 
 @Component({
   selector: 'app-root',
@@ -32,10 +28,6 @@ export class AppComponent implements OnInit {
 
     this.firstTree.push(this.createTree());
 
-    this.firstTreecallbacks = {
-      nameClick: this.onNameClick
-    };
-
     this.firstTreeoptions = {
       checkboxes: false,
       mode: TreeMode.MultiSelect
@@ -61,7 +53,7 @@ export class AppComponent implements OnInit {
   public addNode() {
     let item = {
       name: 'newItem',
-      item: 'item'
+      item: { name: 'superitem' }
     };
 
     this.secondTreeRef.addNodeById(item, this.currentId);
@@ -96,13 +88,13 @@ export class AppComponent implements OnInit {
           id: (++id).toString(),
           name: 'Child_' + i + '_' + j,
           children: grandChildren,
-          item: 'child'
+          item: { name: 'superitem' }
         });
 
         children.push({
           id: (++id).toString(),
           name: 'Child_' + i + '_' + j,
-          item: 'child'
+          item: { name: 'superitem' }
         });
       }
 

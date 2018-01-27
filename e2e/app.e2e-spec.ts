@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('tree-ins-ng2 App', () => {
+describe('tree-ngx App', () => {
   let page: AppPage;
 
   beforeEach(() => {

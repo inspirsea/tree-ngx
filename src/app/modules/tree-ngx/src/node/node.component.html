@@ -1,14 +1,15 @@
 <div class="node">
   <div class="node-container">
-    <div class="node-icon-wrapper">
-      <span *ngIf="collapseVisible" [class.iconCheckbox]="showCheckBox" class="node-icon" (click)="expanded = !expanded;">
-        <i *ngIf="!expanded" class="material-icons">expand_more</i>
-        <i *ngIf="expanded" class="material-icons">chevron_right</i>
-      </span>
+    <div class="node-icon-wrapper" [class.iconCheckbox]="showCheckBox" (click)="expanded = !expanded;">
+      <ng-container *ngIf="collapseVisible">
+        <i *ngIf="!expanded" class="arrow-right"></i>
+        <i *ngIf="expanded" class="arrow-down"></i>
+      </ng-container>
     </div>
 
-    <input #nodeCheckbox class="node-checkbox" *ngIf="showCheckBox" (click)="toggleSelected()" [checked]="selected" type="checkbox" />
-    <div (click)="onNameClick()" [class.markSelected]="markSelected && selected" [class.hasCheckBox]="showCheckBox" class="node-name">
+    <input #nodeCheckbox class="node-checkbox" *ngIf="showCheckBox" (click)="toggleSelected()" [checked]="selected" type="checkbox"
+    />
+    <div (click)="onNameClick()" [class.markSelected]="markSelected && selected" class="node-name">
       <ng-container *ngIf="!nodeNameTemplate">{{nodeItem.name}}</ng-container>
       <ng-container *ngTemplateOutlet="nodeNameTemplate; context: { $implicit: nodeItem, node: nodeItem, context: _this }">
       </ng-container>

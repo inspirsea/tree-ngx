@@ -22,8 +22,8 @@ import { NodeComponent } from '../node/node.component';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
-  selector: 'tree-ins',
-  templateUrl: './tree-ins.component.html',
+  selector: 'tree-ngx',
+  templateUrl: './tree-ngx.component.html',
   providers: [TreeService]
 })
 export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {

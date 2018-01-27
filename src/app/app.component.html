@@ -6,17 +6,17 @@
 </div>
 <div style="display: flex; flex: 1 1; flex-direction: row">
   <div style="display: flex; flex: 1 1; flex-direction: row">
-    <tree-ins #firstTreeRef (selectedItems)="firstSelectedItems = $event" [filter]="filter" [nodeItems]="firstTree" [callbacks]="firstTreecallbacks" [options]="firstTreeoptions">
+    <tree-ngx #firstTreeRef (selectedItems)="firstSelectedItems = $event" [filter]="filter" [nodeItems]="firstTree" [options]="firstTreeoptions">
       <ng-template #nodeNameTemplate let-node="node" let-context="context">
         {{node.name}}
         id: {{node.id}}
         <span (click)="context.delete()">delete</span>
       </ng-template>
-    </tree-ins>
+    </tree-ngx>
   </div>
   <div style="display: flex; flex: 1 1; flex-direction: row">
-    <tree-ins #secondTreeRef (selectedItems)="secondSelectedItems = $event" [filter]="filter" [nodeItems]="secondTree" [callbacks]="secondTreecallbacks" [options]="secondTreeoptions">
-    </tree-ins>
+    <tree-ngx #secondTreeRef (selectedItems)="secondSelectedItems = $event" [filter]="filter" [nodeItems]="secondTree" [callbacks]="secondTreecallbacks" [options]="secondTreeoptions">
+    </tree-ngx>
   </div>
   <div style="display: flex; flex: 1 1; flex-direction: row">
     {{firstSelectedItems | json}}

@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TreeInsComponent } from './tree-ins.component';
+import { TreeInsComponent } from './tree-ngx.component';
 import { TreeService } from '../service/tree-service';
 import { NodeComponent } from '../node/node.component';
 import { TreeMode } from '../model/tree-mode';

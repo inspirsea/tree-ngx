@@ -2,11 +2,10 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { NodeItem } from '../model/node-item';
 import { NodeComponent } from '../node/node.component';
-import { TreeInsComponent } from '../tree-ins/tree-ins.component';
+import { TreeInsComponent } from '../tree-ngx/tree-ngx.component';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/delay';
 import { Subject } from 'rxjs/Subject';
 
 @Injectable()
@@ -14,15 +13,17 @@ export class TreeService {
 
     private selectedContexts: NodeComponent[] = [];
     private selectedItems: any[] = [];
+    private filter = '';
     private selectedItemsSubject = new BehaviorSubject(this.selectedItems);
-    private filterChangeSubject = new BehaviorSubject('');
+    private filterChangeSubject = new BehaviorSubject(this.filter);
     private debounceFilterChange = new Subject<string>();
     private nodeItems: NodeItem<any>[];
     private root: TreeInsComponent;
 
     constructor() {
         this.debounceFilterChange.debounceTime(300).distinctUntilChanged().subscribe(it => {
-            this.filterChangeSubject.next(it);
+            this.filter = it;
+            this.filterChangeSubject.next(this.filter);
         });
     }
 
@@ -43,8 +44,17 @@ export class TreeService {
         this.selectedItems.push(item);
     }
 
-    public unSelect(item: any, context: NodeComponent) {
-        this.removeItem(item);
+    public deleteSubTree(parent: NodeComponent, context: NodeComponent) {
+        this.unSelectSubTree(context);
+
+        let index = parent.nodeItem.children.indexOf(context.nodeItem);
+        if (index !== -1) {
+            parent.nodeItem.children.splice(index, 1);
+        }
+    }
+
+    public unSelect(context: NodeComponent) {
+        this.removeItem(context.nodeItem.item);
         this.removeContext(context);
     }
 
@@ -63,7 +73,7 @@ export class TreeService {
 
         if (result) {
             if (result.nodeItem.children) {
-                result.nodeItem.children.push(nodeItem);
+                result.add(nodeItem);
                 result.childStateChanged();
             }
         }
@@ -73,7 +83,7 @@ export class TreeService {
         let context = this.root.nodeChildren.toArray().find(it => it.nodeItem === nodeItem);
 
         if (context) {
-            this.unSelect(context.nodeItem.item, context);
+            this.unSelect(context);
             let index = this.root.nodeItems.indexOf(nodeItem);
 
             if (index !== -1) {
@@ -84,7 +94,9 @@ export class TreeService {
 
     public deleteById(id: string) {
         let result = this.getNodeItem(this.root, id, this.findById);
-        result.delete();
+        if (result) {
+            result.delete();
+        }
     }
 
     public setRoot(root: TreeInsComponent) {
@@ -97,6 +109,21 @@ export class TreeService {
 
     public collapseAll() {
         this.executeOnParents(this.root.nodeChildren.toArray(), this.collapse);
+    }
+
+    public getFilter() {
+        return this.filter;
+    }
+
+    private unSelectSubTree(context: NodeComponent) {
+        let nodeChildren = context.nodeChildren.toArray();
+        if (nodeChildren.length > 0) {
+            for (let child of nodeChildren) {
+                this.unSelectSubTree(child);
+            }
+        }
+
+        this.unSelect(context);
     }
 
     private collapse(node: NodeComponent) {

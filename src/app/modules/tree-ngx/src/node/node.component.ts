@@ -18,6 +18,8 @@ import { TreeCallbacks } from '../model/tree-callbacks';
 import { TreeOptions } from '../model/tree-options';
 import { TreeMode } from '../model/tree-mode';
 import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
 
 @Component({
   selector: 'node',
@@ -41,7 +43,7 @@ export class NodeComponent implements OnInit, OnChanges, OnDestroy {
   public selectedState: NodeSelectedState = NodeSelectedState.unChecked;
   public selected: boolean;
   public showCheckBox: boolean;
-  public filteredChildren: any[];
+  public filteredChildren: NodeItem<any>[];
   private filterChangeSubscription: Subscription;
 
   constructor(private treeService: TreeService) { }
@@ -104,21 +106,22 @@ export class NodeComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public deleteChild(nodeItem: NodeItem<any>) {
-    let index = this.nodeItem.children.indexOf(nodeItem);
-
-    if (index !== -1) {
-      this.treeService.unSelect(this.nodeItem.item, this);
-      this.nodeItem.children.splice(index, 1);
-    }
+  public deleteChild(nodeContext: NodeComponent) {
+    this.treeService.deleteSubTree(this, nodeContext);
+    this.applyFilter();
   }
 
   public delete() {
     if (this.parent) {
-      this.parent.deleteChild(this.nodeItem);
+      this.parent.deleteChild(this);
     } else {
       this.treeService.deleteRoot(this.nodeItem);
     }
+  }
+
+  public add(nodeItem: NodeItem<any>) {
+    this.nodeItem.children.push(nodeItem);
+    this.applyFilter();
   }
 
   private setUnchecked(propagate: boolean) {
@@ -132,7 +135,7 @@ export class NodeComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     if (!this.nodeItem.children) {
-      this.treeService.unSelect(this.nodeItem.item, this);
+      this.treeService.unSelect(this);
     }
 
     if (propagate === true) {
@@ -232,13 +235,17 @@ export class NodeComponent implements OnInit, OnChanges, OnDestroy {
 
   private connectToFilterOnChange() {
     if (this.nodeItem.children) {
-      this.filterChangeSubscription = this.treeService.connectFilterOnChange().subscribe(value => {
-        this.filteredChildren = this.filter(this.nodeItem.children, value);
+      this.filterChangeSubscription = this.treeService.connectFilterOnChange().subscribe(() => {
+        this.applyFilter();
       });
     }
   }
 
+  private applyFilter() {
+    this.filteredChildren = this.filter(this.nodeItem.children, this.treeService.getFilter());
+  }
+
   private filter(items: NodeItem<any>[], value: string) {
-    return items.filter(it => it.children || value === '' || it.name.toLowerCase().indexOf(value) !== -1);
+    return items.filter(it => (it.children && it.children.length > 0) || value === '' || it.name.toLowerCase().indexOf(value) !== -1);
   }
 }

@@ -1,2 +1,2 @@
-# tree-ins-ng2
+# tree-ngx
 Tree component Angular (2, 4, 5)
