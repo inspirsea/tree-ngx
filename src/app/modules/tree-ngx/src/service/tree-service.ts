@@ -83,7 +83,7 @@ export class TreeService {
         let context = this.root.nodeChildren.toArray().find(it => it.nodeItem === nodeItem);
 
         if (context) {
-            this.unSelect(context);
+            this.unSelectSubTree(context);
             let index = this.root.nodeItems.indexOf(nodeItem);
 
             if (index !== -1) {
@@ -162,7 +162,6 @@ export class TreeService {
     }
 
     private getNodeItem(tree: TreeInsComponent, arg: any, compare: (nodeItem, find: any) => boolean): NodeComponent {
-
         let children = tree.nodeChildren.toArray();
         let child = children.find(it => compare(it, arg));
         if (child) {
