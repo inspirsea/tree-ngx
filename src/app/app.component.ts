@@ -33,10 +33,16 @@ export class AppComponent implements OnInit {
       mode: TreeMode.MultiSelect
     };
 
+    this.firstTreecallbacks = {
+      toggle: this.onNameClick,
+    };
+
     this.secondTree.push(this.createTree());
 
     this.secondTreecallbacks = {
-      nameClick: this.onNameClick
+      nameClick: this.onNameClick,
+      select: this.onNameClick,
+      unSelect: this.onNameClick
     };
 
     this.secondTreeoptions = {
@@ -44,10 +50,6 @@ export class AppComponent implements OnInit {
       mode: TreeMode.MultiSelect
     };
 
-  }
-
-  private test() {
-    console.log('triggered');
   }
 
   public addNode() {
@@ -60,7 +62,7 @@ export class AppComponent implements OnInit {
   }
 
   public deleteNode() {
-    this.firstTreeRef.deleteById(this.currentId);
+    this.secondTreeRef.deleteById(this.currentId);
   }
 
   private createTree() {
@@ -79,8 +81,7 @@ export class AppComponent implements OnInit {
           grandChildren.push({
             id: (++id).toString(),
             name: 'Grandchildren_' + i + '_' + j + '_' + z,
-            item: 'gchild' + i + '_' + j + '_' + z,
-            expanded: false
+            item: 'gchild' + i + '_' + j + '_' + z
           });
         }
 

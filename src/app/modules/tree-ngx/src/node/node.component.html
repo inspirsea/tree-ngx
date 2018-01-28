@@ -1,24 +1,23 @@
 <div class="node">
   <div class="node-container">
-    <div class="node-icon-wrapper" [class.iconCheckbox]="showCheckBox" (click)="expanded = !expanded;">
-      <ng-container *ngIf="collapseVisible">
-        <i *ngIf="!expanded" class="arrow-right"></i>
-        <i *ngIf="expanded" class="arrow-down"></i>
+    <div class="node-icon-wrapper" [class.iconCheckbox]="state.showCheckBox" (click)="state.expanded = !state.expanded;">
+      <ng-container *ngIf="state.collapseVisible">
+        <i *ngIf="!state.expanded" class="arrow-right"></i>
+        <i *ngIf="state.expanded" class="arrow-down"></i>
       </ng-container>
     </div>
 
-    <input #nodeCheckbox class="node-checkbox" *ngIf="showCheckBox" (click)="toggleSelected()" [checked]="selected" type="checkbox"
-    />
-    <div (click)="onNameClick()" [class.markSelected]="markSelected && selected" class="node-name">
-      <ng-container *ngIf="!nodeNameTemplate">{{nodeItem.name}}</ng-container>
-      <ng-container *ngTemplateOutlet="nodeNameTemplate; context: { $implicit: nodeItem, node: nodeItem, context: _this }">
+    <input #nodeCheckbox class="node-checkbox" *ngIf="state.showCheckBox" (click)="toggleSelected()" [checked]="state.selected"
+      type="checkbox" />
+    <div (click)="nameClick()" [class.markSelected]="state.markSelected && state.selected" class="node-name">
+      <ng-container *ngIf="!nodeNameTemplate">{{state.nodeItem.name}}</ng-container>
+      <ng-container *ngTemplateOutlet="nodeNameTemplate; context: { $implicit: nodeItem, node: state.nodeItem, context: _this }">
       </ng-container>
     </div>
   </div>
-  <div *ngIf="nodeItem.children" class="collapsible-wrapper" [class.collapsed]="!expanded && filteredChildren.length > 0">
+  <div *ngIf="state.nodeItem.children" class="collapsible-wrapper" [class.collapsed]="!state.expanded">
     <div class="collapsible">
-      <node #nodeChild class="node-offset" [parent]="_this" [nodeItem]="child" [nodeNameTemplate]="nodeNameTemplate" [callbacks]="callbacks"
-        [options]="options" *ngFor="let child of filteredChildren"></node>
+      <node class="node-offset" [state]="child" [selectedState]="child.selectedState" [nodeNameTemplate]="nodeNameTemplate" *ngFor="let child of state.children"></node>
     </div>
   </div>
 </div>

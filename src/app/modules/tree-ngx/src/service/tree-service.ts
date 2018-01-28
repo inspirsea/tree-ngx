@@ -7,144 +7,243 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import { Subject } from 'rxjs/Subject';
+import { NodeState } from '../model/node-state';
+import { NodeSelectedState } from '../model/node-selected-state';
+import { TreeMode } from '../model/tree-mode';
+import { TreeOptions } from '../model/tree-options';
+import { TreeCallbacks } from '../model/tree-callbacks';
 
 @Injectable()
 export class TreeService {
 
-    private selectedContexts: NodeComponent[] = [];
+    public options: TreeOptions;
+    public callbacks: TreeCallbacks = {};
     private selectedItems: any[] = [];
+    private selectedStates: NodeState[] = [];
     private filter = '';
     private selectedItemsSubject = new BehaviorSubject(this.selectedItems);
     private filterChangeSubject = new BehaviorSubject(this.filter);
-    private debounceFilterChange = new Subject<string>();
     private nodeItems: NodeItem<any>[];
-    private root: TreeInsComponent;
 
     constructor() {
-        this.debounceFilterChange.debounceTime(300).distinctUntilChanged().subscribe(it => {
-            this.filter = it;
-            this.filterChangeSubject.next(this.filter);
+        this.filterChangeSubject.debounceTime(300).distinctUntilChanged().subscribe(it => {
+            this.onFilterChanged();
         });
     }
 
-    public connectFilterOnChange() {
-        return this.filterChangeSubject.asObservable();
-    }
+    public toggleSelected(state: NodeState) {
+        if (state.selectedState === NodeSelectedState.unChecked) {
+            if (this.options.mode === TreeMode.SingleSelect) {
+                this.clear();
+            }
+            this.setChecked(state, true);
+        } else if (state.selectedState === NodeSelectedState.checked
+            || state.selectedState === NodeSelectedState.indeterminate) {
+            this.setUnchecked(state, true);
+        }
 
-    public filterChanged(value: string) {
-        this.debounceFilterChange.next(value);
-    }
+        if (this.callbacks.toggle) {
+            this.callbacks.toggle(state.nodeItem);
+        }
 
-    public connect() {
-        return this.selectedItemsSubject.asObservable();
-    }
-
-    public select(item: any, context: NodeComponent) {
-        this.selectedContexts.push(context);
-        this.selectedItems.push(item);
-    }
-
-    public deleteSubTree(parent: NodeComponent, context: NodeComponent) {
-        this.unSelectSubTree(context);
-
-        let index = parent.nodeItem.children.indexOf(context.nodeItem);
-        if (index !== -1) {
-            parent.nodeItem.children.splice(index, 1);
+        if (state.parent) {
+            this.childStateChanged(state.parent);
         }
     }
 
-    public unSelect(context: NodeComponent) {
-        this.removeItem(context.nodeItem.item);
-        this.removeContext(context);
+    public childStateChanged(state) {
+        if (this.anyChildSelected(state)) {
+            if (this.allChildrenSelected(state)) {
+                this.setChecked(state, false);
+            } else {
+                this.setIndeterminate(state);
+            }
+        } else {
+            this.setUnchecked(state, false);
+        }
+
+        if (state.parent) {
+            this.childStateChanged(state.parent);
+        }
+    }
+
+    public nameClick(state: NodeState) {
+        if (this.callbacks.nameClick) {
+            this.callbacks.nameClick(state.nodeItem);
+        }
+
+        if (this.canToggleChildrenOnName(state)) {
+            this.toggleSelected(state);
+        }
+    }
+
+    public toggleExpanded(nodeStates: NodeState[], value: boolean) {
+        for (let state of nodeStates) {
+            state.expanded = value;
+            this.toggleExpanded(state.children, value);
+        }
     }
 
     public clear() {
-        for (let context of this.selectedContexts) {
-            context.toggleSelected();
+        for (let state of this.selectedStates) {
+            state.selected = false;
+            state.selectedState = NodeSelectedState.unChecked;
         }
+
+        this.selectedItems.length = 0;
+        this.selectedStates.length = 0;
     }
 
-    public setNodeItems(nodeItems: NodeItem<any>[]) {
-        this.nodeItems = nodeItems;
-    }
-
-    public addNodeById(nodeItem: NodeItem<any>, id: string) {
-        let result = this.getNodeItem(this.root, id, this.findById);
+    public addNodeById(nodeStates: NodeState[], nodeState: NodeState, id: string) {
+        let result = this.getNodeItem(nodeStates, id, this.findById);
 
         if (result) {
-            if (result.nodeItem.children) {
-                result.add(nodeItem);
-                result.childStateChanged();
+            if (result.children) {
+                nodeState.parent = result;
+                result.children.push(nodeState);
+                this.childStateChanged(result);
             }
         }
     }
 
-    public deleteRoot(nodeItem: NodeItem<any>) {
-        let context = this.root.nodeChildren.toArray().find(it => it.nodeItem === nodeItem);
+    public deleteById(nodeStates: NodeState[], nodeItems: NodeItem<any>[], id: string) {
+        let result = this.getNodeItem(nodeStates, id, this.findById);
+        if (result) {
+            this.delete(result);
 
-        if (context) {
-            this.unSelectSubTree(context);
-            let index = this.root.nodeItems.indexOf(nodeItem);
+            if (!result.parent) {
+                this.deleteRoot(result, nodeStates, nodeItems);
+            }
+
+            this.childStateChanged(result);
+        }
+    }
+
+    private delete(state: NodeState) {
+        while (state.children.length > 0) {
+            this.delete(state.children.pop());
+        }
+
+        this.removeSelected(state.nodeItem.item);
+        this.remove(state);
+    }
+
+    private deleteRoot(state: NodeState, nodeStates: NodeState[], nodeItems: NodeItem<any>[]) {
+        let itemIndex = nodeItems.indexOf(state.nodeItem);
+
+        if (itemIndex !== -1) {
+            nodeItems.splice(itemIndex, 1);
+        }
+
+        let index = nodeStates.indexOf(state);
+
+        if (index !== -1) {
+            nodeStates.splice(index, 1);
+        }
+    }
+
+    private remove(state: NodeState) {
+        if (state.parent) {
+            let itemIndex = state.parent.nodeItem.children.indexOf(state.nodeItem);
+
+            if (itemIndex !== -1) {
+                state.parent.nodeItem.children.splice(itemIndex, 1);
+            }
+
+            let index = state.parent.children.indexOf(state);
 
             if (index !== -1) {
-                this.root.nodeItems.splice(index, 1);
+                state.parent.children.splice(index, 1);
             }
         }
     }
 
-    public deleteById(id: string) {
-        let result = this.getNodeItem(this.root, id, this.findById);
-        if (result) {
-            result.delete();
-        }
-    }
-
-    public setRoot(root: TreeInsComponent) {
-        this.root = root;
-    }
-
-    public expandAll() {
-        this.executeOnParents(this.root.nodeChildren.toArray(), this.expand);
-    }
-
-    public collapseAll() {
-        this.executeOnParents(this.root.nodeChildren.toArray(), this.collapse);
-    }
-
-    public getFilter() {
-        return this.filter;
-    }
-
-    private unSelectSubTree(context: NodeComponent) {
-        let nodeChildren = context.nodeChildren.toArray();
-        if (nodeChildren.length > 0) {
-            for (let child of nodeChildren) {
-                this.unSelectSubTree(child);
+    private canToggleChildrenOnName(state: NodeState) {
+        if (this.options.checkboxes === false) {
+            if (this.options.mode === TreeMode.SingleSelect && !state.nodeItem.children) {
+                return true;
+            } else if (this.options.mode === TreeMode.MultiSelect) {
+                return true;
             }
         }
 
-        this.unSelect(context);
+        return false;
     }
 
-    private collapse(node: NodeComponent) {
-        node.expanded = false;
+    private anyChildSelected(state: NodeState): boolean {
+        return state.children.find(it => {
+            return it.selectedState === NodeSelectedState.checked || it.selectedState === NodeSelectedState.indeterminate;
+        }) != null ? true : false;
     }
 
-    private expand(node: NodeComponent) {
-        node.expanded = true;
+    private allChildrenSelected(state: NodeState) {
+        return state.children.every(it => it.selectedState === NodeSelectedState.checked)
+            && state.children.length === state.nodeItem.children.length;
     }
 
-    private executeOnParents(children: NodeComponent[], action: (node: NodeComponent) => void) {
-        for (let child of children) {
-            if (child.nodeItem.children) {
-                action(child);
-                this.executeOnParents(child.nodeChildren.toArray(), action);
+    private setUnchecked(state: NodeState, propogate: boolean) {
+        state.selectedState = NodeSelectedState.unChecked;
+        state.selected = false;
+
+        if (this.callbacks.unSelect) {
+            this.callbacks.unSelect(state.nodeItem);
+        }
+
+        if (!state.nodeItem.children) {
+            this.removeSelected(state.nodeItem.item);
+        } else {
+            if (propogate === true) {
+                for (let child of state.children) {
+                    this.setUnchecked(child, propogate);
+                }
             }
         }
     }
 
-    private findById(node: NodeComponent, arg: string) {
-        return node.nodeItem.id === arg;
+    private setIndeterminate(state) {
+        state.selectedState = NodeSelectedState.indeterminate;
+        state.selected = true;
+    }
+
+    private setChecked(state: NodeState, propogate: boolean) {
+        state.selectedState = NodeSelectedState.checked;
+        state.selected = true;
+
+        if (this.callbacks.select) {
+            this.callbacks.select(state.nodeItem);
+        }
+
+        if (!state.nodeItem.children) {
+            this.addSelected(state);
+        } else {
+            if (propogate === true) {
+                for (let child of state.children) {
+                    this.setChecked(child, propogate);
+                }
+            }
+        }
+    }
+
+    private addSelected(state: NodeState) {
+        this.selectedItems.push(state.nodeItem.item);
+        this.selectedStates.push(state);
+    }
+
+    private removeSelected(item: any) {
+        let index = this.selectedItems.indexOf(item);
+        if (index !== -1) {
+            this.selectedItems.splice(index, 1);
+        }
+    }
+
+    private applyFilter(node: NodeComponent, res: boolean) {
+        return node.applyFilter(res);
+    }
+
+
+
+    private findById(state: NodeState, arg: string) {
+        return state.nodeItem.id === arg;
     }
 
     private removeItem(item: any) {
@@ -154,36 +253,52 @@ export class TreeService {
         }
     }
 
-    private removeContext(context: NodeComponent) {
-        let index = this.selectedContexts.indexOf(context);
-        if (index !== -1) {
-            this.selectedContexts.splice(index);
-        }
-    }
+    private getNodeItem(nodeStates: NodeState[], arg: any, compare: (state: NodeState, find: any) => boolean) {
+        let result = nodeStates.find(it => compare(it, arg));
 
-    private getNodeItem(tree: TreeInsComponent, arg: any, compare: (nodeItem, find: any) => boolean): NodeComponent {
-        let children = tree.nodeChildren.toArray();
-        let child = children.find(it => compare(it, arg));
-        if (child) {
-            return child;
-        }
-
-        return this.findByArg(children, arg, compare);
-    }
-
-    private findByArg(children: NodeComponent[], arg: any, compare: (nodeComponent: NodeComponent, find: any) => boolean): NodeComponent {
-        for (let child of children) {
-            if (child.nodeItem.children) {
-                let result = child.nodeChildren.find(it => compare(it, arg));
+        if (result) {
+            return result;
+        } else {
+            for (let state of nodeStates) {
+                result = this.getNodeItem(state.children, arg, compare);
                 if (result) {
                     return result;
-                } else {
-                    result = this.findByArg(child.nodeChildren.toArray(), arg, compare);
-                    if (result) {
-                        return result;
-                    }
                 }
             }
         }
+
+        return result;
     }
+
+    public filterChanged(value: string) {
+        this.filter = value;
+        this.filterChangeSubject.next(value);
+    }
+
+
+
+    public connect() {
+        return this.selectedItemsSubject.asObservable();
+    }
+
+    public getFilter() {
+        return this.filter;
+    }
+
+    private onFilterChanged() {
+        // this.executeOnParents(this.root.nodeChildren.toArray(), this.applyFilter);
+    }
+
+    private unSelectSubTree(context: NodeComponent) {
+        // let nodeChildren = context.nodeChildren.toArray();
+        // if (nodeChildren.length > 0) {
+        //     for (let child of nodeChildren) {
+        //         this.unSelectSubTree(child);
+        //     }
+        // }
+
+        // this.unSelect(context);
+    }
+
+
 }

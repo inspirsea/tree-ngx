@@ -20,6 +20,8 @@ import { TreeMode } from '../model/tree-mode';
 import { ISubscription, Subscription } from 'rxjs/Subscription';
 import { NodeComponent } from '../node/node.component';
 import { Observable } from 'rxjs/Observable';
+import { NodeState } from '../model/node-state';
+import { NodeSelectedState } from '../model/node-selected-state';
 
 @Component({
   selector: 'tree-ngx',
@@ -29,17 +31,18 @@ import { Observable } from 'rxjs/Observable';
 export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
 
   @ContentChild('nodeNameTemplate') nodeNameTemplate: TemplateRef<any>;
-  @ViewChildren('nodeChild') nodeChildren: QueryList<NodeComponent>;
+
+  public treeState: NodeState[] = [];
+
+  private subscription: ISubscription;
 
   private defaultOptions: TreeOptions = {
     mode: TreeMode.MultiSelect,
     checkboxes: true
   };
 
-  private subscription: ISubscription;
-
   @Input() options: TreeOptions = this.defaultOptions;
-  @Input() callbacks: TreeCallbacks = {};
+  @Input() callbacks: TreeCallbacks = this.treeService.callbacks;
   @Input() nodeItems: NodeItem<any>[];
   @Input() filter = '';
   @Output() selectedItems = new EventEmitter<any>();
@@ -48,11 +51,14 @@ export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
+    this.treeService.options = this.options;
+    this.treeService.callbacks = this.callbacks;
+
     this.subscription = this.treeService.connect().subscribe(it => {
       this.selectedItems.emit(it);
     });
 
-    this.treeService.setRoot(this);
+    this.treeState = this.initTreeStructure(null, this.nodeItems, this.options);
   }
 
   ngOnDestroy() {
@@ -60,12 +66,16 @@ export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.nodeItems) {
-      this.treeService.setNodeItems(this.nodeItems);
-    }
-
     if (changes.filter) {
       this.treeService.filterChanged(this.filter.toLowerCase());
+    }
+
+    if (changes.options) {
+      this.treeService.options = this.options;
+    }
+    
+    if (changes.callbacks) {
+      this.treeService.callbacks = this.callbacks;
     }
   }
 
@@ -74,18 +84,79 @@ export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public addNodeById(nodeItem: NodeItem<any>, id: string) {
-    this.treeService.addNodeById(nodeItem, id);
+    let newNodeState = this.initState(null, nodeItem, this.options);
+    this.treeService.addNodeById(this.treeState, newNodeState, id);
   }
 
   public deleteById(id: string) {
-    this.treeService.deleteById(id);
+    this.treeService.deleteById(this.treeState, this.nodeItems, id);
   }
 
   public expandAll() {
-    this.treeService.expandAll();
+    this.treeService.toggleExpanded(this.treeState, true);
   }
 
   public collapseAll() {
-    this.treeService.collapseAll();
+    this.treeService.toggleExpanded(this.treeState, false);
+  }
+
+  private initTreeStructure(parent: NodeState, nodeItems: NodeItem<any>[], options: TreeOptions) {
+    let treeStructure: NodeState[] = [];
+
+    for (let nodeItem of nodeItems) {
+
+      let nodeState = this.initState(parent, nodeItem, options);
+
+      if (nodeItem.children) {
+        nodeState.children = this.initTreeStructure(nodeState, nodeItem.children, options);
+      }
+
+      treeStructure.push(nodeState);
+    }
+
+    return treeStructure;
+  }
+
+  private initState(parent: NodeState, nodeItem: NodeItem<any>, options: TreeOptions) {
+
+    let nodeState: NodeState = {
+      parent: parent,
+      children: [],
+      nodeItem: nodeItem,
+      expanded: nodeItem.expanded === false ? false : true,
+      markSelected: this.getMarkSelected(nodeItem, options),
+      collapseVisible: this.getCollapseVisible(nodeItem),
+      selectedState: NodeSelectedState.unChecked,
+      selected: false,
+      showCheckBox: this.getCheckBoxVisible(nodeItem, options),
+      filteredNodeItems: nodeItem.children
+    };
+
+    return nodeState;
+  }
+
+  private getMarkSelected(nodeItem: NodeItem<any>, options: TreeOptions) {
+    if (!nodeItem.children && !options.checkboxes) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  private getCheckBoxVisible(nodeItem: NodeItem<any>, options: TreeOptions) {
+    if (nodeItem.children && this.options.mode === TreeMode.SingleSelect
+      || !this.options.checkboxes) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  private getCollapseVisible(nodeItem: NodeItem<any>) {
+    if (nodeItem.children && nodeItem.children.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

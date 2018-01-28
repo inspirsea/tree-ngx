@@ -1,4 +1,3 @@
 <div class="tree-ngx">
-  <node #nodeChild class="node-root" [nodeItem]="nodeItem" [nodeNameTemplate]="nodeNameTemplate" [callbacks]="callbacks" [options]="options"
-    *ngFor="let nodeItem of nodeItems"></node>
+  <node class="node-root" [state]="state" [selectedState]="state.selectedState" [nodeNameTemplate]="nodeNameTemplate" *ngFor="let state of treeState"></node>
 </div>

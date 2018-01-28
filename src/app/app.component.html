@@ -6,7 +6,7 @@
 </div>
 <div style="display: flex; flex: 1 1; flex-direction: row">
   <div style="display: flex; flex: 1 1; flex-direction: row">
-    <tree-ngx #firstTreeRef (selectedItems)="firstSelectedItems = $event" [filter]="filter" [nodeItems]="firstTree" [options]="firstTreeoptions">
+    <tree-ngx #firstTreeRef (selectedItems)="firstSelectedItems = $event" [filter]="filter" [nodeItems]="firstTree" [callbacks]="firstTreecallbacks" [options]="firstTreeoptions">
       <ng-template #nodeNameTemplate let-node="node" let-context="context">
         {{node.name}}
         id: {{node.id}}
