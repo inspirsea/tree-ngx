@@ -49,7 +49,6 @@ export class AppComponent implements OnInit {
       checkboxes: true,
       mode: TreeMode.MultiSelect
     };
-
   }
 
   public addNode() {

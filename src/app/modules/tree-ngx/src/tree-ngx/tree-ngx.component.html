@@ -1,3 +1,3 @@
 <div class="tree-ngx">
-  <node class="node-root" [state]="state" [selectedState]="state.selectedState" [nodeNameTemplate]="nodeNameTemplate" *ngFor="let state of treeState"></node>
+  <node class="node-root" [state]="state" [selectedState]="state.selectedState" [nodeNameTemplate]="nodeNameTemplate" *ngFor="let state of treeService.treeState"></node>
 </div>

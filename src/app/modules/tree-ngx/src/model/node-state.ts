@@ -4,8 +4,9 @@ import { NodeSelectedState } from './node-selected-state';
 export interface NodeState {
     parent: NodeState;
     children: NodeState[];
+    filteredChildren: NodeState[];
+    hasFilteredChildren: boolean;
     nodeItem: NodeItem<any>;
-    filteredNodeItems: NodeItem<any>[];
     expanded: boolean;
     markSelected: boolean;
     collapseVisible: boolean;

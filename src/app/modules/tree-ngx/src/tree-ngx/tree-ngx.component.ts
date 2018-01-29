@@ -32,8 +32,6 @@ export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
 
   @ContentChild('nodeNameTemplate') nodeNameTemplate: TemplateRef<any>;
 
-  public treeState: NodeState[] = [];
-
   private subscription: ISubscription;
 
   private defaultOptions: TreeOptions = {
@@ -53,12 +51,13 @@ export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
   ngOnInit() {
     this.treeService.options = this.options;
     this.treeService.callbacks = this.callbacks;
+    this.treeService.nodeItems = this.nodeItems;
 
     this.subscription = this.treeService.connect().subscribe(it => {
       this.selectedItems.emit(it);
     });
 
-    this.treeState = this.initTreeStructure(null, this.nodeItems, this.options);
+    this.treeService.treeState = this.initTreeStructure(null, this.treeService.nodeItems, this.options);
   }
 
   ngOnDestroy() {
@@ -73,7 +72,7 @@ export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
     if (changes.options) {
       this.treeService.options = this.options;
     }
-    
+
     if (changes.callbacks) {
       this.treeService.callbacks = this.callbacks;
     }
@@ -85,19 +84,19 @@ export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
 
   public addNodeById(nodeItem: NodeItem<any>, id: string) {
     let newNodeState = this.initState(null, nodeItem, this.options);
-    this.treeService.addNodeById(this.treeState, newNodeState, id);
+    this.treeService.addNodeById(newNodeState, id);
   }
 
   public deleteById(id: string) {
-    this.treeService.deleteById(this.treeState, this.nodeItems, id);
+    this.treeService.deleteById(id);
   }
 
   public expandAll() {
-    this.treeService.toggleExpanded(this.treeState, true);
+    this.treeService.toggleExpanded(true);
   }
 
   public collapseAll() {
-    this.treeService.toggleExpanded(this.treeState, false);
+    this.treeService.toggleExpanded(false);
   }
 
   private initTreeStructure(parent: NodeState, nodeItems: NodeItem<any>[], options: TreeOptions) {
@@ -109,6 +108,7 @@ export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
 
       if (nodeItem.children) {
         nodeState.children = this.initTreeStructure(nodeState, nodeItem.children, options);
+        nodeState.filteredChildren = nodeState.children;
       }
 
       treeStructure.push(nodeState);
@@ -122,14 +122,15 @@ export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
     let nodeState: NodeState = {
       parent: parent,
       children: [],
+      filteredChildren: [],
+      hasFilteredChildren: false,
       nodeItem: nodeItem,
       expanded: nodeItem.expanded === false ? false : true,
       markSelected: this.getMarkSelected(nodeItem, options),
       collapseVisible: this.getCollapseVisible(nodeItem),
       selectedState: NodeSelectedState.unChecked,
       selected: false,
-      showCheckBox: this.getCheckBoxVisible(nodeItem, options),
-      filteredNodeItems: nodeItem.children
+      showCheckBox: this.getCheckBoxVisible(nodeItem, options)
     };
 
     return nodeState;

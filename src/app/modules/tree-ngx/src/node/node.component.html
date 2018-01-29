@@ -17,7 +17,7 @@
   </div>
   <div *ngIf="state.nodeItem.children" class="collapsible-wrapper" [class.collapsed]="!state.expanded">
     <div class="collapsible">
-      <node class="node-offset" [state]="child" [selectedState]="child.selectedState" [nodeNameTemplate]="nodeNameTemplate" *ngFor="let child of state.children"></node>
+      <node class="node-offset" [state]="child" [selectedState]="child.selectedState" [nodeNameTemplate]="nodeNameTemplate" *ngFor="let child of state.filteredChildren"></node>
     </div>
   </div>
 </div>

@@ -18,16 +18,18 @@ export class TreeService {
 
     public options: TreeOptions;
     public callbacks: TreeCallbacks = {};
+    public treeState: NodeState[] = [];
+    public nodeItems: NodeItem<any>[];
+
     private selectedItems: any[] = [];
     private selectedStates: NodeState[] = [];
-    private filter = '';
+    private filterValue = '';
     private selectedItemsSubject = new BehaviorSubject(this.selectedItems);
-    private filterChangeSubject = new BehaviorSubject(this.filter);
-    private nodeItems: NodeItem<any>[];
+    private filterChangeSubject = new BehaviorSubject(this.filterValue);
 
     constructor() {
         this.filterChangeSubject.debounceTime(300).distinctUntilChanged().subscribe(it => {
-            this.onFilterChanged();
+            this.filterTraverse(this.treeState, this.filterValue);
         });
     }
 
@@ -77,11 +79,8 @@ export class TreeService {
         }
     }
 
-    public toggleExpanded(nodeStates: NodeState[], value: boolean) {
-        for (let state of nodeStates) {
-            state.expanded = value;
-            this.toggleExpanded(state.children, value);
-        }
+    public toggleExpanded(value: boolean) {
+        this.toggleExpandedTraverse(this.treeState, value);
     }
 
     public clear() {
@@ -94,29 +93,35 @@ export class TreeService {
         this.selectedStates.length = 0;
     }
 
-    public addNodeById(nodeStates: NodeState[], nodeState: NodeState, id: string) {
-        let result = this.getNodeItem(nodeStates, id, this.findById);
+    public addNodeById(nodeState: NodeState, id: string) {
+        let result = this.getNodeItem(this.treeState, id, this.findById);
 
         if (result) {
             if (result.children) {
                 nodeState.parent = result;
                 result.children.push(nodeState);
                 this.childStateChanged(result);
+                this.filterTraverse(this.treeState, this.filterValue);
             }
         }
     }
 
-    public deleteById(nodeStates: NodeState[], nodeItems: NodeItem<any>[], id: string) {
-        let result = this.getNodeItem(nodeStates, id, this.findById);
+    public deleteById(id: string) {
+        let result = this.getNodeItem(this.treeState, id, this.findById);
         if (result) {
-            this.delete(result);
-
-            if (!result.parent) {
-                this.deleteRoot(result, nodeStates, nodeItems);
-            }
-
-            this.childStateChanged(result);
+            this.deleteByState(result);
         }
+    }
+
+    public deleteByState(state: NodeState) {
+        this.delete(state);
+        this.childStateChanged(state);
+        this.filterTraverse(this.treeState, this.filterValue);
+    }
+
+    public filterChanged(value: string) {
+        this.filterValue = value;
+        this.filterChangeSubject.next(value);
     }
 
     private delete(state: NodeState) {
@@ -126,6 +131,17 @@ export class TreeService {
 
         this.removeSelected(state.nodeItem.item);
         this.remove(state);
+
+        if (!state.parent) {
+            this.deleteRoot(state, this.treeState, this.nodeItems);
+        }
+    }
+
+    private toggleExpandedTraverse(nodeStates: NodeState[], value: boolean) {
+        for (let state of nodeStates) {
+            state.expanded = value;
+            this.toggleExpandedTraverse(state.children, value);
+        }
     }
 
     private deleteRoot(state: NodeState, nodeStates: NodeState[], nodeItems: NodeItem<any>[]) {
@@ -236,12 +252,6 @@ export class TreeService {
         }
     }
 
-    private applyFilter(node: NodeComponent, res: boolean) {
-        return node.applyFilter(res);
-    }
-
-
-
     private findById(state: NodeState, arg: string) {
         return state.nodeItem.id === arg;
     }
@@ -270,35 +280,36 @@ export class TreeService {
         return result;
     }
 
-    public filterChanged(value: string) {
-        this.filter = value;
-        this.filterChangeSubject.next(value);
-    }
-
-
-
     public connect() {
         return this.selectedItemsSubject.asObservable();
     }
 
-    public getFilter() {
-        return this.filter;
+    public applyFilter(state: NodeState, filter: string) {
+        state.filteredChildren = this.filter(state.children, filter);
+        return state.filteredChildren.length > 0;
     }
 
-    private onFilterChanged() {
-        // this.executeOnParents(this.root.nodeChildren.toArray(), this.applyFilter);
+    private filter(states: NodeState[], value: string) {
+        return states.filter(it => it.hasFilteredChildren || value === '' || it.nodeItem.name.toLowerCase().indexOf(value) !== -1);
     }
 
-    private unSelectSubTree(context: NodeComponent) {
-        // let nodeChildren = context.nodeChildren.toArray();
-        // if (nodeChildren.length > 0) {
-        //     for (let child of nodeChildren) {
-        //         this.unSelectSubTree(child);
-        //     }
-        // }
+    private filterTraverse(states: NodeState[], filter: string) {
+        let results: boolean[] = [];
 
-        // this.unSelect(context);
+        for (let state of states) {
+            if (state.children.length > 0) {
+                state.hasFilteredChildren = false;
+                state.hasFilteredChildren = this.filterTraverse(state.children, filter);
+
+                let res = this.applyFilter(state, filter);
+                if (res) {
+                    state.hasFilteredChildren = true;    
+                }
+
+                results.push(state.hasFilteredChildren);
+            }
+        }
+
+        return results.some(it => it === true);
     }
-
-
 }

@@ -37,6 +37,8 @@ export class NodeComponent implements OnChanges {
   @Input() callbacks: TreeCallbacks = {};
   @Input() options: TreeOptions;
 
+  public _this = this;
+
   constructor(private treeService: TreeService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -63,17 +65,7 @@ export class NodeComponent implements OnChanges {
     this.treeService.nameClick(this.state);
   }
 
-  public add(nodeItem: NodeItem<any>) {
-    this.state.nodeItem.children.push(nodeItem);
-    this.applyFilter(true);
-  }
-
-  public applyFilter(hasChildren: boolean) {
-    this.state.filteredNodeItems = this.filter(this.state.nodeItem.children, hasChildren, this.treeService.getFilter());
-    return this.state.filteredNodeItems.length > 0;
-  }
-
-  private filter(items: NodeItem<any>[], hasChildren: boolean, value: string) {
-    return items.filter(it => hasChildren || value === '' || it.name.toLowerCase().indexOf(value) !== -1);
+  public delete() {
+    this.treeService.deleteByState(this.state);
   }
 }
