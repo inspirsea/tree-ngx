@@ -35,13 +35,20 @@
 }
 
 .node-icon-wrapper {
-  cursor: pointer;
   position: relative;
   display: inline-block;
   width: 20px;
   height: 18px;
-  top: 7px;
+  top: 1px;
   left: 6px;
+
+  &.disabled {
+    cursor: default;
+  }
+}
+
+.collapsable {
+  cursor: pointer;
 }
 
 .node-container {

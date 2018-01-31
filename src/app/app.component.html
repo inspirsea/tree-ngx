@@ -7,6 +7,10 @@
 <div style="display: flex; flex: 1 1; flex-direction: row">
   <div style="display: flex; flex: 1 1; flex-direction: row">
     <tree-ngx #firstTreeRef (selectedItems)="firstSelectedItems = $event" [filter]="filter" [nodeItems]="firstTree" [callbacks]="firstTreecallbacks" [options]="firstTreeoptions">
+      <ng-template #nodeCollapsibleTemplate let-expanded="expanded">
+        <span *ngIf="expanded">-</span>
+        <span *ngIf="!expanded">+</span>
+      </ng-template>
       <ng-template #nodeNameTemplate let-node="node" let-context="context">
         {{node.name}}
         id: {{node.id}}
@@ -16,6 +20,11 @@
   </div>
   <div style="display: flex; flex: 1 1; flex-direction: row">
     <tree-ngx #secondTreeRef (selectedItems)="secondSelectedItems = $event" [filter]="filter" [nodeItems]="secondTree" [callbacks]="secondTreecallbacks" [options]="secondTreeoptions">
+      <ng-template #nodeNameTemplate let-node="node" let-context="context">
+        {{node.name}}
+        id: {{node.id}}
+        <span (click)="context.delete()">delete</span>
+      </ng-template>
     </tree-ngx>
   </div>
   <div style="display: flex; flex: 1 1; flex-direction: row">

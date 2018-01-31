@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { TreeInsComponent } from './src/tree-ngx/tree-ngx.component';
 import { NodeComponent } from './src//node/node.component';
 import { TreeService } from './src//service/tree-service';
+import { NodeNameComponent } from './src/node-name/node-name.component';
+import { NodeIconWrapperComponent } from './src/node-icon-wrapper/node-icon-wrapper.component';
 
 @NgModule({
   imports: [
@@ -11,6 +13,8 @@ import { TreeService } from './src//service/tree-service';
   declarations: [
     TreeInsComponent,
     NodeComponent,
+    NodeNameComponent,
+    NodeIconWrapperComponent,
   ],
   providers: [
     TreeService

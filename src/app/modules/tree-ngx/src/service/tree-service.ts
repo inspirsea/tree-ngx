@@ -100,6 +100,7 @@ export class TreeService {
             if (result.children) {
                 nodeState.parent = result;
                 result.children.push(nodeState);
+                result.nodeItem.children.push(nodeState.nodeItem);
                 this.childStateChanged(result);
                 this.filterTraverse(this.treeState, this.filterValue);
             }
@@ -160,16 +161,21 @@ export class TreeService {
 
     private remove(state: NodeState) {
         if (state.parent) {
-            let itemIndex = state.parent.nodeItem.children.indexOf(state.nodeItem);
+            state.parent.hasFilteredChildren = false;
 
+            let itemIndex = state.parent.nodeItem.children.indexOf(state.nodeItem);
             if (itemIndex !== -1) {
                 state.parent.nodeItem.children.splice(itemIndex, 1);
             }
 
             let index = state.parent.children.indexOf(state);
-
             if (index !== -1) {
                 state.parent.children.splice(index, 1);
+            }
+
+            let filteredIndex = state.parent.filteredChildren.indexOf(state);
+            if (filteredIndex !== -1) {
+                state.parent.filteredChildren.splice(filteredIndex, 1);
             }
         }
     }
@@ -303,7 +309,7 @@ export class TreeService {
 
                 let res = this.applyFilter(state, filter);
                 if (res) {
-                    state.hasFilteredChildren = true;    
+                    state.hasFilteredChildren = true;
                 }
 
                 results.push(state.hasFilteredChildren);

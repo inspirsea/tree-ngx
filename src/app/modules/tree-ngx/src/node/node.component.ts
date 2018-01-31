@@ -1,26 +1,12 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  ViewChild,
-  ElementRef,
-  ViewChildren,
-  QueryList,
-  TemplateRef,
-  OnChanges,
-  OnDestroy,
-  SimpleChanges
-} from '@angular/core';
-import { NodeItem } from '../model/node-item';
-import { Observable } from 'rxjs/Observable';
-import { NodeSelectedState } from '../model/node-selected-state';
-import { TreeService } from '../service/tree-service';
-import { TreeCallbacks } from '../model/tree-callbacks';
-import { TreeOptions } from '../model/tree-options';
-import { TreeMode } from '../model/tree-mode';
+import { Component, OnChanges, ElementRef, ViewChild, Input, TemplateRef, SimpleChanges } from '@angular/core';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import { NodeState } from '../model/node-state';
+import { NodeSelectedState } from '../model/node-selected-state';
+import { TreeCallbacks } from '../model/tree-callbacks';
+import { TreeOptions } from '../model/tree-options';
+import { TreeService } from '../service/tree-service';
+
 
 @Component({
   selector: 'node',
@@ -32,10 +18,8 @@ export class NodeComponent implements OnChanges {
 
   @Input() state: NodeState;
   @Input() selectedState: NodeSelectedState;
-  @Input() parent: NodeComponent;
   @Input() nodeNameTemplate: TemplateRef<any>;
-  @Input() callbacks: TreeCallbacks = {};
-  @Input() options: TreeOptions;
+  @Input() nodeCollapsibleTemplate: TemplateRef<any>;
 
   public _this = this;
 
@@ -59,13 +43,5 @@ export class NodeComponent implements OnChanges {
 
   public toggleSelected() {
     this.treeService.toggleSelected(this.state);
-  }
-
-  public nameClick() {
-    this.treeService.nameClick(this.state);
-  }
-
-  public delete() {
-    this.treeService.deleteByState(this.state);
   }
 }

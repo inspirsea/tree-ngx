@@ -1,23 +1,14 @@
 <div class="node">
   <div class="node-container">
-    <div class="node-icon-wrapper" [class.iconCheckbox]="state.showCheckBox" (click)="state.expanded = !state.expanded;">
-      <ng-container *ngIf="state.collapseVisible">
-        <i *ngIf="!state.expanded" class="arrow-right"></i>
-        <i *ngIf="state.expanded" class="arrow-down"></i>
-      </ng-container>
-    </div>
-
-    <input #nodeCheckbox class="node-checkbox" *ngIf="state.showCheckBox" (click)="toggleSelected()" [checked]="state.selected"
-      type="checkbox" />
-    <div (click)="nameClick()" [class.markSelected]="state.markSelected && state.selected" class="node-name">
-      <ng-container *ngIf="!nodeNameTemplate">{{state.nodeItem.name}}</ng-container>
-      <ng-container *ngTemplateOutlet="nodeNameTemplate; context: { $implicit: nodeItem, node: state.nodeItem, context: _this }">
-      </ng-container>
-    </div>
+    <node-icon-wrapper [state]="state" [nodeCollapsibleTemplate]="nodeCollapsibleTemplate"></node-icon-wrapper>
+    <input #nodeCheckbox class="node-checkbox" *ngIf="state.showCheckBox" (click)="toggleSelected()" [disabled]="state.nodeItem?.children?.length == 0"
+      [checked]="state.selected" type="checkbox" />
+    <node-name [state]="state" [nodeNameTemplate]="nodeNameTemplate"></node-name>
   </div>
-  <div *ngIf="state.nodeItem.children" class="collapsible-wrapper" [class.collapsed]="!state.expanded">
+  <div *ngIf="state.nodeItem.children" class="collapsible-wrapper" [class.collapsed]="!state.expanded && state.nodeItem.children.length > 0 && state.filteredChildren.length > 0">
     <div class="collapsible">
-      <node class="node-offset" [state]="child" [selectedState]="child.selectedState" [nodeNameTemplate]="nodeNameTemplate" *ngFor="let child of state.filteredChildren"></node>
+      <node class="node-offset" [state]="child" [selectedState]="child.selectedState" [nodeCollapsibleTemplate]="nodeCollapsibleTemplate"
+        [nodeNameTemplate]="nodeNameTemplate" *ngFor="let child of state.filteredChildren"></node>
     </div>
   </div>
 </div>

@@ -94,7 +94,8 @@ export class AppComponent implements OnInit {
         children.push({
           id: (++id).toString(),
           name: 'Child_' + i + '_' + j,
-          item: { name: 'superitem' }
+          item: { name: 'superitem' },
+          children: []
         });
       }
 

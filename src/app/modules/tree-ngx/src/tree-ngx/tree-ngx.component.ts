@@ -31,6 +31,7 @@ import { NodeSelectedState } from '../model/node-selected-state';
 export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
 
   @ContentChild('nodeNameTemplate') nodeNameTemplate: TemplateRef<any>;
+  @ContentChild('nodeCollapsibleTemplate') nodeCollapsibleTemplate: TemplateRef<any>;
 
   private subscription: ISubscription;
 
@@ -154,7 +155,7 @@ export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private getCollapseVisible(nodeItem: NodeItem<any>) {
-    if (nodeItem.children && nodeItem.children.length > 0) {
+    if (nodeItem.children) {
       return true;
     } else {
       return false;

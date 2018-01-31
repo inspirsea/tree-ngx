@@ -1,0 +1,17 @@
+<div class="node-icon-wrapper" [class.disabled]="state.nodeItem?.children?.length == 0" [class.collapsable]="state.collapseVisible"
+  [class.iconCheckbox]="state.showCheckBox" (click)="state.expanded = !state.expanded;">
+  <ng-container *ngIf="!nodeCollapsibleTemplate">
+    <ng-container *ngIf="state.collapseVisible && state.nodeItem?.children?.length > 0">
+      <i *ngIf="!state.expanded" class="arrow-right"></i>
+      <i *ngIf="state.expanded" class="arrow-down"></i>
+    </ng-container>
+    <ng-container *ngIf="state.nodeItem?.children?.length == 0">
+      <i class="arrow-down collapse-empty"></i>
+    </ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="state.collapseVisible && state.nodeItem?.children?.length > 0">
+    <ng-container *ngTemplateOutlet="nodeCollapsibleTemplate; context: { expanded: state.expanded }">
+    </ng-container>
+  </ng-container>
+</div>

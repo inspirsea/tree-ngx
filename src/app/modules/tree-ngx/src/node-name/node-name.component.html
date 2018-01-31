@@ -1,0 +1,6 @@
+<div (click)="nameClick()" [class.markSelected]="state.markSelected && state.selected" class="node-name">
+  <ng-container *ngIf="!nodeNameTemplate">{{state.nodeItem.name}}</ng-container>
+
+  <ng-container *ngTemplateOutlet="nodeNameTemplate; context: { $implicit: nodeItem, node: state.nodeItem, context: _this }">
+  </ng-container>
+</div>
