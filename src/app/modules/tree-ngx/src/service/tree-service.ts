@@ -207,12 +207,17 @@ export class TreeService {
         state.selectedState = NodeSelectedState.unChecked;
         state.selected = false;
 
-        if (this.callbacks.unSelect) {
-            this.callbacks.unSelect(state.nodeItem);
-        }
-
         if (!state.nodeItem.children) {
             this.removeSelected(state.nodeItem.item);
+
+            if (this.options.alwaysEmitSelected === true) {
+                this.selectedItemsSubject.next(this.selectedItems);
+            }
+
+            if (this.callbacks.unSelect) {
+                this.callbacks.unSelect(state.nodeItem);
+            }
+
         } else {
             if (propogate === true) {
                 for (let child of state.children) {
@@ -231,10 +236,6 @@ export class TreeService {
         state.selectedState = NodeSelectedState.checked;
         state.selected = true;
 
-        if (this.callbacks.select) {
-            this.callbacks.select(state.nodeItem);
-        }
-
         if (!state.nodeItem.children) {
             this.addSelected(state);
         } else {
@@ -249,6 +250,14 @@ export class TreeService {
     private addSelected(state: NodeState) {
         this.selectedItems.push(state.nodeItem.item);
         this.selectedStates.push(state);
+
+        if (this.options.alwaysEmitSelected === true) {
+            this.selectedItemsSubject.next(this.selectedItems);
+        }
+
+        if (this.callbacks.select) {
+            this.callbacks.select(state.nodeItem);
+        }
     }
 
     private removeSelected(item: any) {

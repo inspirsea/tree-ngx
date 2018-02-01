@@ -37,7 +37,8 @@ export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
 
   private defaultOptions: TreeOptions = {
     mode: TreeMode.MultiSelect,
-    checkboxes: true
+    checkboxes: true,
+    alwaysEmitSelected: false
   };
 
   @Input() options: TreeOptions = this.defaultOptions;
@@ -77,10 +78,6 @@ export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
     if (changes.callbacks) {
       this.treeService.callbacks = this.callbacks;
     }
-  }
-
-  public connect(): Observable<any[]> {
-    return this.treeService.connect();
   }
 
   public addNodeById(nodeItem: NodeItem<any>, id: string) {

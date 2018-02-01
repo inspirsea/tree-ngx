@@ -30,7 +30,8 @@ export class AppComponent implements OnInit {
 
     this.firstTreeoptions = {
       checkboxes: false,
-      mode: TreeMode.MultiSelect
+      mode: TreeMode.MultiSelect,
+      alwaysEmitSelected: false
     };
 
     this.firstTreecallbacks = {
@@ -41,14 +42,20 @@ export class AppComponent implements OnInit {
 
     this.secondTreecallbacks = {
       nameClick: this.onNameClick,
-      select: this.onNameClick,
-      unSelect: this.onNameClick
+      select: this.onSelect,
+      unSelect: this.onUnselect
     };
 
     this.secondTreeoptions = {
       checkboxes: true,
-      mode: TreeMode.MultiSelect
+      mode: TreeMode.MultiSelect,
+      alwaysEmitSelected: true
     };
+  }
+
+  public selecedItemsChanged(items: any[]) {
+    this.firstSelectedItems = items;
+    console.log('emitted');
   }
 
   public addNode() {
@@ -119,5 +126,13 @@ export class AppComponent implements OnInit {
 
   private onNameClick(item: NodeItem<any>) {
     console.log(item);
+  }
+
+  private onSelect(item: NodeItem<any>) {
+    console.log('select');
+  }
+
+  private onUnselect(item: NodeItem<any>) {
+    console.log('unselect');
   }
 }
