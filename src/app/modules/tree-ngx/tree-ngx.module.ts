@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TreeInsComponent } from './src/tree-ngx/tree-ngx.component';
+import { TreeNgxComponent } from './src/tree-ngx/tree-ngx.component';
 import { NodeComponent } from './src//node/node.component';
 import { TreeService } from './src//service/tree-service';
 import { NodeNameComponent } from './src/node-name/node-name.component';
@@ -11,7 +11,7 @@ import { NodeIconWrapperComponent } from './src/node-icon-wrapper/node-icon-wrap
     CommonModule
   ],
   declarations: [
-    TreeInsComponent,
+    TreeNgxComponent,
     NodeComponent,
     NodeNameComponent,
     NodeIconWrapperComponent,
@@ -20,7 +20,7 @@ import { NodeIconWrapperComponent } from './src/node-icon-wrapper/node-icon-wrap
     TreeService
   ],
   exports: [
-    TreeInsComponent
+    TreeNgxComponent
   ]
 })
 export class TreeNgxModule { }

@@ -28,7 +28,7 @@ import { NodeSelectedState } from '../model/node-selected-state';
   templateUrl: './tree-ngx.component.html',
   providers: [TreeService]
 })
-export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
+export class TreeNgxComponent implements OnInit, OnDestroy, OnChanges {
 
   @ContentChild('nodeNameTemplate') nodeNameTemplate: TemplateRef<any>;
   @ContentChild('nodeCollapsibleTemplate') nodeCollapsibleTemplate: TemplateRef<any>;
@@ -47,19 +47,13 @@ export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
   @Input() filter = '';
   @Output() selectedItems = new EventEmitter<any>();
 
-  constructor(private treeService: TreeService) {
+  constructor(public treeService: TreeService) {
   }
 
   ngOnInit() {
-    this.treeService.options = this.options;
-    this.treeService.callbacks = this.callbacks;
-    this.treeService.nodeItems = this.nodeItems;
-
     this.subscription = this.treeService.connect().subscribe(it => {
       this.selectedItems.emit(it);
     });
-
-    this.treeService.treeState = this.initTreeStructure(null, this.treeService.nodeItems, this.options);
   }
 
   ngOnDestroy() {
@@ -78,6 +72,10 @@ export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
     if (changes.callbacks) {
       this.treeService.callbacks = this.callbacks;
     }
+
+    if (changes.nodeItems) {
+      this.initialize();
+    }
   }
 
   public addNodeById(nodeItem: NodeItem<any>, id: string) {
@@ -95,6 +93,15 @@ export class TreeInsComponent implements OnInit, OnDestroy, OnChanges {
 
   public collapseAll() {
     this.treeService.toggleExpanded(false);
+  }
+
+  public initialize() {
+    this.treeService.options = this.options;
+    this.treeService.callbacks = this.callbacks;
+    this.treeService.nodeItems = this.nodeItems;
+
+    this.treeService.treeState = this.initTreeStructure(null, this.treeService.nodeItems, this.options);
+    this.treeService.setInitialState();
   }
 
   private initTreeStructure(parent: NodeState, nodeItems: NodeItem<any>[], options: TreeOptions) {

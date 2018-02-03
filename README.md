@@ -1,2 +1,2 @@
 # tree-ngx
-Tree component Angular (2, 4, 5)
+Tree component Angular (4, 5)

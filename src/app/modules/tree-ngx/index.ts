@@ -1,6 +1,6 @@
 export * from './tree-ngx.module';
 
-export { TreeInsComponent } from './src/tree-ngx/tree-ngx.component';
+export { TreeNgxComponent } from './src/tree-ngx/tree-ngx.component';
 
 export { NodeItem } from './src/model/node-item';
 export { TreeOptions } from './src/model/tree-options';

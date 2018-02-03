@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { NodeItem } from '../model/node-item';
 import { NodeComponent } from '../node/node.component';
-import { TreeInsComponent } from '../tree-ngx/tree-ngx.component';
+import { TreeNgxComponent } from '../tree-ngx/tree-ngx.component';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
@@ -34,6 +34,15 @@ export class TreeService {
     }
 
     public toggleSelected(state: NodeState) {
+        
+        this.toggleSelectedState(state);
+
+        if (this.callbacks.toggle) {
+            this.callbacks.toggle(state.nodeItem);
+        }
+    }
+
+    public toggleSelectedState(state) {
         if (state.selectedState === NodeSelectedState.unChecked) {
             if (this.options.mode === TreeMode.SingleSelect) {
                 this.clear();
@@ -44,13 +53,13 @@ export class TreeService {
             this.setUnchecked(state, true);
         }
 
-        if (this.callbacks.toggle) {
-            this.callbacks.toggle(state.nodeItem);
-        }
-
         if (state.parent) {
             this.childStateChanged(state.parent);
         }
+    }
+
+    public setInitialState() {
+        this.setInitialSelectedState(this.treeState);
     }
 
     public childStateChanged(state) {
@@ -123,6 +132,15 @@ export class TreeService {
     public filterChanged(value: string) {
         this.filterValue = value;
         this.filterChangeSubject.next(value);
+    }
+
+    private setInitialSelectedState(nodeStates: NodeState[]) {
+        for (let state of nodeStates) {
+            if (!state.nodeItem.children && state.nodeItem.selected) {
+                this.toggleSelectedState(state);
+            }
+            this.setInitialSelectedState(state.children);
+        }
     }
 
     private delete(state: NodeState) {

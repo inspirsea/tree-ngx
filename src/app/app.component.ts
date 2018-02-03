@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { TreeInsComponent, NodeItem, TreeCallbacks, TreeOptions, TreeMode } from './modules/tree-ngx';
+import { TreeNgxComponent, NodeItem, TreeCallbacks, TreeOptions, TreeMode } from './modules/tree-ngx';
 
 @Component({
   selector: 'app-root',
@@ -8,8 +8,8 @@ import { TreeInsComponent, NodeItem, TreeCallbacks, TreeOptions, TreeMode } from
 })
 export class AppComponent implements OnInit {
 
-  @ViewChild('firstTreeRef') firstTreeRef: TreeInsComponent;
-  @ViewChild('secondTreeRef') secondTreeRef: TreeInsComponent;
+  @ViewChild('firstTreeRef') firstTreeRef: TreeNgxComponent;
+  @ViewChild('secondTreeRef') secondTreeRef: TreeNgxComponent;
 
   public firstTree: NodeItem<string>[] = [];
   public firstTreecallbacks: TreeCallbacks;
@@ -87,7 +87,8 @@ export class AppComponent implements OnInit {
           grandChildren.push({
             id: (++id).toString(),
             name: 'Grandchildren_' + i + '_' + j + '_' + z,
-            item: 'gchild' + i + '_' + j + '_' + z
+            item: 'gchild' + i + '_' + j + '_' + z,
+            selected: i === 0 ? true : false
           });
         }
 
@@ -95,7 +96,7 @@ export class AppComponent implements OnInit {
           id: (++id).toString(),
           name: 'Child_' + i + '_' + j,
           children: grandChildren,
-          item: { name: 'superitem' }
+          item: null
         });
 
         children.push({

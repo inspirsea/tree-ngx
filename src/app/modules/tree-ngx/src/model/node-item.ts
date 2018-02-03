@@ -3,5 +3,6 @@ export interface NodeItem<T> {
     item: T;
     id?: string;
     children?: NodeItem<any>[];
+    selected?: boolean;
     expanded?: boolean;
 }

@@ -1,14 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TreeInsComponent } from './tree-ngx.component';
+import { TreeNgxComponent } from './tree-ngx.component';
 import { TreeService } from '../service/tree-service';
 import { NodeComponent } from '../node/node.component';
 import { TreeMode } from '../model/tree-mode';
 import { TreeOptions } from '../model/tree-options';
+import { NodeIconWrapperComponent } from '../node-icon-wrapper/node-icon-wrapper.component';
+import { NodeNameComponent } from '../node-name/node-name.component';
+import { SimpleChanges } from '@angular/core';
 
-describe('TreeInsComponent', () => {
-  let component: TreeInsComponent;
-  let fixture: ComponentFixture<TreeInsComponent>;
+fdescribe('TreeInsComponent', () => {
+  let component: TreeNgxComponent;
+  let fixture: ComponentFixture<TreeNgxComponent>;
+  let service: TreeService;
 
   let multiCheckbox = {
     checkboxes: true,
@@ -33,13 +37,13 @@ describe('TreeInsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       providers: [TreeService],
-      declarations: [TreeInsComponent, NodeComponent]
+      declarations: [TreeNgxComponent, NodeComponent, NodeIconWrapperComponent, NodeNameComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TreeInsComponent);
+    fixture = TestBed.createComponent(TreeNgxComponent);
     component = fixture.componentInstance;
 
     component.nodeItems = [{
@@ -66,7 +70,11 @@ describe('TreeInsComponent', () => {
       }]
     }];
 
+    service = fixture.debugElement.injector.get(TreeService);
+
+    component.initialize();
     fixture.detectChanges();
+    component.ngOnChanges({});
   });
 
   it('Should create', () => {
@@ -79,24 +87,7 @@ describe('TreeInsComponent', () => {
     expect(component.options.checkboxes).toBeDefined();
   });
 
-  it('Connect', () => {
-
-    let service = fixture.debugElement.injector.get(TreeService);
-    service.select(component.nodeItems[0].children[0].item, new NodeComponent(service));
-
-    let hasBeenCalled;
-    component.connect().subscribe(it => {
-      expect(it[0]).toEqual(component.nodeItems[0].children[0].item);
-      hasBeenCalled = true;
-    });
-
-    expect(hasBeenCalled).toBeTruthy();
-  });
-
   it('AddNodeById, multiCheckbox', () => {
-
-    let service = fixture.debugElement.injector.get(TreeService);
-
     component.options = multiCheckbox;
 
     fixture.detectChanges();
@@ -109,9 +100,6 @@ describe('TreeInsComponent', () => {
   });
 
   it('AddNodeById, singleCheckbox', () => {
-
-    let service = fixture.debugElement.injector.get(TreeService);
-
     component.options = singleCheckbox;
 
     fixture.detectChanges();
@@ -124,9 +112,6 @@ describe('TreeInsComponent', () => {
   });
 
   it('AddNodeById, multi', () => {
-
-    let service = fixture.debugElement.injector.get(TreeService);
-
     component.options = multi;
 
     fixture.detectChanges();
@@ -139,8 +124,6 @@ describe('TreeInsComponent', () => {
   });
 
   it('AddNodeById, single', () => {
-
-    let service = fixture.debugElement.injector.get(TreeService);
 
     component.options = single;
 
@@ -158,9 +141,9 @@ describe('TreeInsComponent', () => {
     component.collapseAll();
     fixture.detectChanges();
 
-    expect(component.nodeChildren.toArray()[0].expanded).toBeFalsy();
-    expect(component.nodeChildren.toArray()[0].nodeChildren.toArray()[0].expanded).toBeFalsy();
-    
+    expect(service.treeState[0].expanded).toBeFalsy();
+    expect(service.treeState[0].children[0].expanded).toBeFalsy();
+
   });
 
   it('ExpandAll', () => {
@@ -168,9 +151,8 @@ describe('TreeInsComponent', () => {
     component.expandAll();
     fixture.detectChanges();
 
-    expect(component.nodeChildren.toArray()[0].expanded).toBeTruthy();
-    expect(component.nodeChildren.toArray()[0].nodeChildren.toArray()[0].expanded).toBeTruthy();
-    
+    expect(service.treeState[0].expanded).toBeTruthy();
+    expect(service.treeState[0].children[0].expanded).toBeTruthy();
   });
 
   it('DeleteById', () => {
