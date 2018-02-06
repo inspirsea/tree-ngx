@@ -11,7 +11,7 @@
   </ng-container>
 
   <ng-container *ngIf="state.collapseVisible && state.nodeItem?.children?.length > 0">
-    <ng-container *ngTemplateOutlet="nodeCollapsibleTemplate; context: { expanded: state.expanded }">
+    <ng-container *ngTemplateOutlet="nodeCollapsibleTemplate; context: { expanded: state.expanded, context: _this }">
     </ng-container>
   </ng-container>
 </div>

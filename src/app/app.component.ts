@@ -26,7 +26,25 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
 
-    this.firstTree.push(this.createTree());
+    this.firstTree = [
+      {
+        id: '0',
+        name: 'all',
+        item: 'asd',
+        children: [
+          {
+            id: '1',
+            name: 'child',
+            item: 'asd',
+          }   
+        ]
+      }
+    ];
+
+    setTimeout(() => {
+      this.firstTree = [this.createTree()];  
+    }, 3000);
+    
 
     this.firstTreeoptions = {
       checkboxes: false,

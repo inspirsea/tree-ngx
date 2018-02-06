@@ -101,6 +101,7 @@ export class TreeNgxComponent implements OnInit, OnDestroy, OnChanges {
     this.treeService.nodeItems = this.nodeItems;
 
     this.treeService.treeState = this.initTreeStructure(null, this.treeService.nodeItems, this.options);
+    this.treeService.clear();
     this.treeService.setInitialState();
   }
 

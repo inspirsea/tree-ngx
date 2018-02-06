@@ -10,6 +10,11 @@ export class NodeIconWrapperComponent {
   @Input() state: NodeState;
   @Input() nodeCollapsibleTemplate: TemplateRef<any>;
 
+  public _this = this;
+
   constructor() { }
 
+  public toggleExpand() {
+    this.state.expanded = !this.state.expanded;
+  }
 }

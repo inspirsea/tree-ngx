@@ -22,4 +22,8 @@ export class NodeNameComponent {
   public delete() {
     this.treeService.deleteByState(this.state);
   }
+
+  public toggleExpand() {
+    this.state.expanded = !this.state.expanded;
+  }
 }
