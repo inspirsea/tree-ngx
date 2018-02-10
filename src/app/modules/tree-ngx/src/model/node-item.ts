@@ -1,6 +1,6 @@
 export interface NodeItem<T> {
     name: string;
-    item: T;
+    item?: T;
     id?: string;
     children?: NodeItem<any>[];
     selected?: boolean;

@@ -36,8 +36,8 @@ export class TreeNgxComponent implements OnInit, OnDestroy, OnChanges {
   private subscription: ISubscription;
 
   private defaultOptions: TreeOptions = {
-    mode: TreeMode.MultiSelect,
-    checkboxes: true,
+    mode: TreeMode.SingleSelect,
+    checkboxes: false,
     alwaysEmitSelected: false
   };
 
@@ -66,7 +66,7 @@ export class TreeNgxComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     if (changes.options) {
-      this.treeService.options = this.options;
+      this.setOptions();
     }
 
     if (changes.callbacks) {
@@ -96,11 +96,11 @@ export class TreeNgxComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public initialize() {
-    this.treeService.options = this.options;
+    this.setOptions();
     this.treeService.callbacks = this.callbacks;
     this.treeService.nodeItems = this.nodeItems;
 
-    this.treeService.treeState = this.initTreeStructure(null, this.treeService.nodeItems, this.options);
+    this.treeService.treeState = this.initTreeStructure(null, this.treeService.nodeItems, this.treeService.options);
     this.treeService.clear();
     this.treeService.setInitialState();
   }
@@ -121,6 +121,14 @@ export class TreeNgxComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     return treeStructure;
+  }
+
+  private setOptions() {
+    if (this.options.mode === TreeMode.NoSelect) {
+      this.treeService.options = { ...this.options, checkboxes: false };
+    } else {
+      this.treeService.options = { ...this.options };
+    }
   }
 
   private initState(parent: NodeState, nodeItem: NodeItem<any>, options: TreeOptions) {
@@ -151,8 +159,8 @@ export class TreeNgxComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private getCheckBoxVisible(nodeItem: NodeItem<any>, options: TreeOptions) {
-    if (nodeItem.children && this.options.mode === TreeMode.SingleSelect
-      || !this.options.checkboxes) {
+    if (nodeItem.children && this.treeService.options.mode === TreeMode.SingleSelect
+      || !this.treeService.options.checkboxes) {
       return false;
     } else {
       return true;
