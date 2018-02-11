@@ -19,8 +19,8 @@ Callbacks
 
 ## Documentation
 
-View the documentation at http://emilsunesson.com/code/tree-ngx-intro
+View the full documentation at http://emilsunesson.com/code/tree-ngx-intro
 
 ## Demo
 
-Working demos can be found in the documentation http://emilsunesson.com/code/tree-ngx-example
+http://emilsunesson.com/code/tree-ngx-example
