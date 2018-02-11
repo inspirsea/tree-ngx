@@ -6,10 +6,15 @@ Tree-ngx is designed to be usable "out of the box", aswell as beeing highly cust
 ## Supports
 
 Selection
+
 Tri-state checkboxes
+
 Filtering
+
 Custom Templates
+
 Custom Styling
+
 Callbacks
 
 ## Documentation
