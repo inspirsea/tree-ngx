@@ -1,7 +1,7 @@
 {
   "name": "tree-ngx",
   "description": "A highly customizable Angular Tree Component with minimal implementation",
-  "version": "0.0.6",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
