@@ -48,7 +48,7 @@ import { TreeNgxModule } from 'tree-ngx';
 ### Template
 
 ```sh
-<tree-ngx[nodeItems]="nodeItems"> </tree-ngx>
+<tree-ngx [nodeItems]="nodeItems"> </tree-ngx>
 ```
 
 ### Data
