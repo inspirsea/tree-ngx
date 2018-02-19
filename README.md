@@ -1,5 +1,7 @@
-# tree-ngx
 [![npm version](https://badge.fury.io/js/tree-ngx.svg)](https://badge.fury.io/js/tree-ngx)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
+
+# tree-ngx
 
 ## Introduction
 Tree-ngx is designed to be usable "out of the box", as well as being highly customizable. Tested in angular 4 and 5, and in Chrome, FF, Opera, Edge.
