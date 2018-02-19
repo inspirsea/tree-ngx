@@ -1,5 +1,5 @@
 [![npm version](https://badge.fury.io/js/tree-ngx.svg)](https://badge.fury.io/js/tree-ngx)
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/inspirsea/tree-ngx/blob/master/LICENSE)
 
 # tree-ngx
 
