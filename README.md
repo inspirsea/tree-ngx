@@ -1,7 +1,7 @@
 # tree-ngx
 [![npm version](https://badge.fury.io/js/tree-ngx.svg)](https://badge.fury.io/js/tree-ngx)
 
-## Angular Tree Component
+## Introduction
 Tree-ngx is designed to be usable "out of the box", as well as being highly customizable. Tested in angular 4 and 5, and in Chrome, FF, Opera, Edge.
 
 ## Supports
@@ -24,7 +24,7 @@ View the full documentation at http://emilsunesson.com/code/tree-ngx-intro
 
 ## Demo
 
-http://emilsunesson.com/code/tree-ngx-example
+Live demo can be found in the documentation http://emilsunesson.com/code/tree-ngx-intro
 
 ## Installation
 
