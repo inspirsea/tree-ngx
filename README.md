@@ -48,6 +48,8 @@ import { TreeNgxModule } from 'tree-ngx';
 
 ## Example
 
+<img src="./test.png">
+
 ### Template
 
 ```sh
