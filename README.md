@@ -48,7 +48,7 @@ import { TreeNgxModule } from 'tree-ngx';
 
 ## Example
 
-<!-- <img src="./test.png"> -->
+<img src="./assets/example.png">
 
 ### Template
 
