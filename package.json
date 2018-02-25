@@ -1,7 +1,7 @@
 {
   "name": "tree-ngx",
   "description": "A highly customizable Angular Tree Component, usable with minimal implementation.",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "repository": {
     "type": "git",
     "url": "https://github.com/inspirsea/tree-ngx.git"
@@ -37,8 +37,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "bundle": "ng-packagr -p ng-package.json && npm run bundle-styles",
-    "bundle-styles": "scss-bundle -c style.config.json"
+    "bundle": "ng-packagr -p ng-package.json && npm run bundle-styles && npm run bundle-assets",
+    "bundle-styles": "scss-bundle -c style.config.json",
+    "bundle-assets": "cp -r assets dist"
   },
   "private": false,
   "peerDependencies": {
