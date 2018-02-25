@@ -48,6 +48,9 @@ import { TreeNgxModule } from 'tree-ngx';
 
 ## Example
 
+How it looks with some minor style customization.
+See the working example at http://emilsunesson.com/code/tree-ngx-example.
+
 <img src="./assets/example.png">
 
 ### Template
