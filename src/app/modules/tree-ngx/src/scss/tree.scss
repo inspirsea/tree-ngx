@@ -20,11 +20,14 @@
 
 .node-name {
   display: inline-block;
-  cursor: pointer;
   padding: 5px 0px 5px 7px;
   &.markSelected {
     padding: 5px 0px 5px 2px;
     border-left: 5px #226699 solid;
+  }
+
+  .active {
+    cursor: pointer;
   }
 }
 

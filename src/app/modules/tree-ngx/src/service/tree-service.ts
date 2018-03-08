@@ -137,6 +137,18 @@ export class TreeService {
     this.filterChangeSubject.next(value);
   }
 
+  public canToggleChildrenOnName(state: NodeState) {
+    if (this.options.checkboxes === false) {
+      if (this.options.mode === TreeMode.SingleSelect && !state.nodeItem.children) {
+        return true;
+      } else if (this.options.mode === TreeMode.MultiSelect) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   private setInitialSelectedState(nodeStates: NodeState[]) {
     for (let state of nodeStates) {
       if (!state.nodeItem.children && state.nodeItem.selected) {
@@ -199,18 +211,6 @@ export class TreeService {
         state.parent.filteredChildren.splice(filteredIndex, 1);
       }
     }
-  }
-
-  private canToggleChildrenOnName(state: NodeState) {
-    if (this.options.checkboxes === false) {
-      if (this.options.mode === TreeMode.SingleSelect && !state.nodeItem.children) {
-        return true;
-      } else if (this.options.mode === TreeMode.MultiSelect) {
-        return true;
-      }
-    }
-
-    return false;
   }
 
   private anyChildSelected(state: NodeState): boolean {

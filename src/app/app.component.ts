@@ -73,7 +73,6 @@ export class AppComponent implements OnInit {
 
   public selecedItemsChanged(items: any[]) {
     this.firstSelectedItems = items;
-    console.log('emitted');
   }
 
   public addNode() {

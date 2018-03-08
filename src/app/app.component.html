@@ -1,29 +1,31 @@
 <div>
-    <button (click)="addNode()">addNode</button><button (click)="deleteNode()">deleteNode</button><input type="text" [(ngModel)]="currentId">
-    <button (click)="firstTreeRef.expandAll()">ExpandAll</button>
-    <button (click)="firstTreeRef.collapseAll()">CollapseAll</button>
-    <input type="text" [(ngModel)]="filter">
+  <button (click)="addNode()">addNode</button>
+  <button (click)="deleteNode()">deleteNode</button>
+  <input type="text" [(ngModel)]="currentId">
+  <button (click)="firstTreeRef.expandAll()">ExpandAll</button>
+  <button (click)="firstTreeRef.collapseAll()">CollapseAll</button>
+  <input type="text" [(ngModel)]="filter">
 </div>
 <div style="display: flex; flex: 1 1; flex-direction: row">
   <div style="display: flex; flex: 1 1; flex-direction: row">
-    <tree-ngx #firstTreeRef (selectedItems)="selecedItemsChanged($event)" [filter]="filter" [nodeItems]="firstTree" [callbacks]="firstTreecallbacks" [options]="firstTreeoptions">
+    <tree-ngx #firstTreeRef (selectedItems)="selecedItemsChanged($event)" [filter]="filter" [nodeItems]="firstTree" [callbacks]="firstTreecallbacks"
+      [options]="firstTreeoptions">
       <ng-template #nodeCollapsibleTemplate let-expanded="expanded">
         <span *ngIf="expanded">-</span>
         <span *ngIf="!expanded">+</span>
       </ng-template>
       <ng-template #nodeNameTemplate let-node="node" let-context="context">
-        {{node.name}}
-        id: {{node.id}}
-        <span (click)="context.delete()">delete</span>
+        <span [class.active]="context.active">{{node.name}} id: {{node.id}}</span>
+        <span style="cursor: pointer" (click)="context.delete()">delete</span>
       </ng-template>
     </tree-ngx>
   </div>
   <div style="display: flex; flex: 1 1; flex-direction: row">
-    <tree-ngx #secondTreeRef (selectedItems)="secondSelectedItems = $event" [filter]="filter" [nodeItems]="secondTree" [callbacks]="secondTreecallbacks" [options]="secondTreeoptions">
+    <tree-ngx #secondTreeRef (selectedItems)="secondSelectedItems = $event" [filter]="filter" [nodeItems]="secondTree" [callbacks]="secondTreecallbacks"
+      [options]="secondTreeoptions">
       <ng-template #nodeNameTemplate let-node="node" let-context="context">
-        {{node.name}}
-        id: {{node.id}}
-        <span (click)="context.delete()">delete</span>
+        {{node.name}} id: {{node.id}}
+        <span style="cursor: pointer" (click)="context.delete()">delete</span>
       </ng-template>
     </tree-ngx>
   </div>
