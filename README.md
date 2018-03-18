@@ -4,7 +4,10 @@
 # tree-ngx
 
 ## Introduction
-Tree-ngx is designed to be usable "out of the box", as well as being highly customizable. Tested in angular 4 and 5, and in Chrome, FF, Opera, Edge.
+Tree-ngx is a treeview component. Its made to be usable with minimal implementation as well as being highly customizable.
+Made with flexbox, and the default style is easy to override.
+
+If you find a bug or have a feature request please open an issue on GitHub.
 
 ## Supports
 
@@ -51,7 +54,8 @@ import { TreeNgxModule } from 'tree-ngx';
 How it looks with some minor style customization.
 See the working example at http://emilsunesson.com/code/tree-ngx-example.
 
-<img src="./assets/example.png">
+<img src="./assets/dark.png">
+<img src="./assets/light.png">
 
 ### Template
 

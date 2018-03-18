@@ -24,7 +24,7 @@
     <tree-ngx #secondTreeRef (selectedItems)="secondSelectedItems = $event" [filter]="filter" [nodeItems]="secondTree" [callbacks]="secondTreecallbacks"
       [options]="secondTreeoptions">
       <ng-template #nodeNameTemplate let-node="node" let-context="context">
-        {{node.name}} id: {{node.id}}
+        <span [class.active]="context.active">{{node.name}} id: {{node.id}}</span>
         <span style="cursor: pointer" (click)="context.delete()">delete</span>
       </ng-template>
     </tree-ngx>
@@ -35,4 +35,9 @@
   <div style="display: flex; flex: 1 1; flex-direction: row">
     {{secondSelectedItems | json}}
   </div>
+</div>
+<div>
+  <tree-ngx #secondTreeRef [nodeItems]="secondTree" [callbacks]="secondTreecallbacks"
+      [options]="secondTreeoptions">
+    </tree-ngx>
 </div>
