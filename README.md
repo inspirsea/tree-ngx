@@ -54,8 +54,8 @@ import { TreeNgxModule } from 'tree-ngx';
 How it looks with some minor style customization.
 See the working example at http://emilsunesson.com/code/tree-ngx-example.
 
-<img src="./assets/dark.png">
-<img src="./assets/light.png">
+<img src="https://raw.githubusercontent.com/inspirsea/tree-ngx/HEAD/assets/dark.png">
+<img src="https://raw.githubusercontent.com/inspirsea/tree-ngx/HEAD/assets/light.png">
 
 ### Template
 
