@@ -7,7 +7,7 @@
 Tree-ngx is a treeview component. Its made to be usable with minimal implementation as well as being highly customizable.
 Made with flexbox, and the default style is easy to override.
 
-If you find a bug or have a feature request please open an issue on GitHub.
+If you find a bug or have a feature request please open a Github issue.
 
 ## Supports
 
@@ -58,6 +58,8 @@ See the working example at http://emilsunesson.com/code/tree-ngx-example.
 <img src="https://raw.githubusercontent.com/inspirsea/tree-ngx/HEAD/assets/light.png">
 
 ### Template
+
+Basic template implementation.
 
 ```sh
 <tree-ngx [nodeItems]="nodeItems"> </tree-ngx>
