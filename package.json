@@ -42,7 +42,10 @@
     "bundle-assets": "cp -r assets dist"
   },
   "private": false,
-  "peerDependencies": {},
+  "peerDependencies": {
+    "@angular/common": ">=6.0.0",
+    "@angular/core": ">=6.0.0"
+  },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.7.0",
     "@angular/common": "^6.1.6",
