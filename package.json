@@ -1,7 +1,7 @@
 {
   "name": "tree-ngx",
   "description": "A highly customizable Angular Tree Component, usable with minimal implementation.",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/inspirsea/tree-ngx.git"
@@ -75,7 +75,7 @@
     "karma-coverage-istanbul-reporter": "^1.2.1",
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
-    "ng-packagr": "^1.6.0",
+    "ng-packagr": "^4.1.1",
     "protractor": "~5.1.2",
     "scss-bundle": "^2.1.2",
     "ts-node": "~3.2.0",
