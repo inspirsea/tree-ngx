@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { NodeItem } from '../model/node-item';
 import { NodeState } from '../model/node-state';
@@ -311,7 +311,7 @@ export class TreeService {
     return result;
   }
 
-  public connect() {
+  public connect(): Observable<any[]> {
     return this.selectedItemsSubject.asObservable();
   }
 

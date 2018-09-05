@@ -1,7 +1,7 @@
 {
   "name": "tree-ngx",
   "description": "A highly customizable Angular Tree Component, usable with minimal implementation.",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/inspirsea/tree-ngx.git"
