@@ -8,18 +8,14 @@ import {
   Output,
   ContentChild,
   TemplateRef,
-  SimpleChanges,
-  QueryList,
-  ViewChildren
+  SimpleChanges
 } from '@angular/core';
 import { NodeItem } from '../model/node-item';
 import { TreeService } from '../service/tree-service';
 import { TreeOptions } from '../model/tree-options';
 import { TreeCallbacks } from '../model/tree-callbacks';
 import { TreeMode } from '../model/tree-mode';
-import { ISubscription, Subscription } from 'rxjs/Subscription';
-import { NodeComponent } from '../node/node.component';
-import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs';
 import { NodeState } from '../model/node-state';
 import { NodeSelectedState } from '../model/node-selected-state';
 
@@ -33,7 +29,7 @@ export class TreeNgxComponent implements OnInit, OnDestroy, OnChanges {
   @ContentChild('nodeNameTemplate') nodeNameTemplate: TemplateRef<any>;
   @ContentChild('nodeCollapsibleTemplate') nodeCollapsibleTemplate: TemplateRef<any>;
 
-  private subscription: ISubscription;
+  private subscription: Subscription;
 
   private defaultOptions: TreeOptions = {
     mode: TreeMode.SingleSelect,

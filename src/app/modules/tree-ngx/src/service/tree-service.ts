@@ -1,12 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { NodeItem } from '../model/node-item';
-import { NodeComponent } from '../node/node.component';
-import { TreeNgxComponent } from '../tree-ngx/tree-ngx.component';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import { Subject } from 'rxjs/Subject';
 import { NodeState } from '../model/node-state';
 import { NodeSelectedState } from '../model/node-selected-state';
 import { TreeMode } from '../model/tree-mode';
@@ -28,7 +23,7 @@ export class TreeService {
   private filterChangeSubject = new BehaviorSubject(this.filterValue);
 
   constructor() {
-    this.filterChangeSubject.debounceTime(300).distinctUntilChanged().subscribe(it => {
+    this.filterChangeSubject.pipe(debounceTime(300), distinctUntilChanged()).subscribe(it => {
       this.filterTraverse(this.treeState, this.filterValue);
     });
   }
