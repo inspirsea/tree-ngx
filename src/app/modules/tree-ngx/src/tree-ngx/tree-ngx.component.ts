@@ -15,7 +15,7 @@ import { TreeService } from '../service/tree-service';
 import { TreeOptions } from '../model/tree-options';
 import { TreeCallbacks } from '../model/tree-callbacks';
 import { TreeMode } from '../model/tree-mode';
-import { Subscription } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 import { NodeState } from '../model/node-state';
 import { NodeSelectedState } from '../model/node-selected-state';
 
@@ -48,7 +48,10 @@ export class TreeNgxComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit() {
     this.subscription = this.treeService.connect().subscribe(it => {
-      this.selectedItems.emit(it);
+      const sub = timer(0).subscribe(() => {
+        this.selectedItems.emit(it);
+        sub.unsubscribe();
+      });
     });
   }
 

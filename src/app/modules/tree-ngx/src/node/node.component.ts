@@ -1,4 +1,4 @@
-import { Component, OnChanges, ElementRef, ViewChild, Input, TemplateRef, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, ElementRef, ViewChild, Input, TemplateRef, SimpleChanges, AfterViewInit } from '@angular/core';
 import { NodeState } from '../model/node-state';
 import { NodeSelectedState } from '../model/node-selected-state';
 import { TreeService } from '../service/tree-service';
@@ -8,7 +8,7 @@ import { TreeService } from '../service/tree-service';
   selector: 'node',
   templateUrl: './node.component.html'
 })
-export class NodeComponent implements OnChanges {
+export class NodeComponent implements OnChanges, AfterViewInit {
 
   @ViewChild('nodeCheckbox') nodeCheckbox: ElementRef;
 
@@ -25,6 +25,10 @@ export class NodeComponent implements OnChanges {
     if (changes.selectedState) {
       this.selectedStateChanged();
     }
+  }
+
+  ngAfterViewInit() {
+    this.selectedStateChanged();
   }
 
   private selectedStateChanged() {
