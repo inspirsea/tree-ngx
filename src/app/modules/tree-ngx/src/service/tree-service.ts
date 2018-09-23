@@ -114,6 +114,28 @@ export class TreeService {
     }
   }
 
+  public editNameById(id: string, name: string) {
+    const nodeState = this.getNodeItem(this.treeState, id, this.findById);
+
+    if (nodeState && nodeState.nodeItem) {
+      nodeState.nodeItem.name = name;
+    }
+  }
+
+  public editItemById(id: string, item: any) {
+    const nodeState = this.getNodeItem(this.treeState, id, this.findById);
+
+    if (nodeState && nodeState.nodeItem) {
+      if (this.selectedItems.includes(nodeState.nodeItem.item)) {
+        this.removeSelected(nodeState.nodeItem.item);
+        this.selectedItems.push(item);
+        this.selectedItemsSubject.next(this.selectedItems);
+      }
+      
+      nodeState.nodeItem.item = item;
+    }
+  }
+
   public deleteById(id: string) {
     let result = this.getNodeItem(this.treeState, id, this.findById);
     if (result) {
@@ -285,13 +307,6 @@ export class TreeService {
 
   private findById(state: NodeState, arg: string) {
     return state.nodeItem.id === arg;
-  }
-
-  private removeItem(item: any) {
-    let index = this.selectedItems.indexOf(item);
-    if (index !== -1) {
-      this.selectedItems.splice(index, 1);
-    }
   }
 
   private getNodeItem(nodeStates: NodeState[], arg: any, compare: (state: NodeState, find: any) => boolean) {

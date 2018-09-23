@@ -5,6 +5,12 @@
   <button (click)="firstTreeRef.expandAll()">ExpandAll</button>
   <button (click)="firstTreeRef.collapseAll()">CollapseAll</button>
   <input type="text" [(ngModel)]="filter">
+  <button (click)="editNodeName()">editName</button>
+  <button (click)="editNodeItem()">editItem</button>
+</div>
+<div *ngIf="editableNode">
+  {{editableNode | json}}
+  <input [(ngModel)]="editableNode.name">
 </div>
 <div style="display: flex; flex: 1 1; flex-direction: row">
   <div style="display: flex; flex: 1 1; flex-direction: row">

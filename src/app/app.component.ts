@@ -22,6 +22,8 @@ export class AppComponent implements OnInit {
   public secondSelectedItems: any[];
   public filter = '';
 
+  public editableNode: NodeItem<any>;
+
   public currentId: string;
 
   ngOnInit() {
@@ -36,7 +38,7 @@ export class AppComponent implements OnInit {
             id: '1',
             name: 'child',
             item: 'asd',
-          }   
+          }
         ]
       }
     ];
@@ -73,6 +75,14 @@ export class AppComponent implements OnInit {
 
   public selecedItemsChanged(items: any[]) {
     this.firstSelectedItems = items;
+  }
+
+  public editNodeName() {
+    this.firstTreeRef.editNameById(this.currentId, 'wubwub');
+  }
+
+  public editNodeItem() {
+    this.firstTreeRef.editItemById(this.currentId, 'item');
   }
 
   public addNode() {

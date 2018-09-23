@@ -86,6 +86,14 @@ export class TreeNgxComponent implements OnInit, OnDestroy, OnChanges {
     this.treeService.deleteById(id);
   }
 
+  public editNameById(id: string, name: string) {
+    this.treeService.editNameById(id, name);
+  }
+
+  public editItemById(id: string, item: any) {
+    this.treeService.editItemById(id, item);
+  }
+
   public expandAll() {
     this.treeService.toggleExpanded(true);
   }
