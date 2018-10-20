@@ -19,7 +19,7 @@ export class NodeComponent implements OnChanges, AfterViewInit {
 
   public _this = this;
 
-  constructor(private treeService: TreeService) { }
+  constructor(public treeService: TreeService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selectedState) {
