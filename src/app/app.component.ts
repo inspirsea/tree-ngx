@@ -67,8 +67,8 @@ export class AppComponent implements OnInit {
     };
 
     this.secondTreeoptions = {
-      checkboxes: true,
-      mode: TreeMode.HideSelected,
+      checkboxes: false,
+      mode: TreeMode.MultiSelect,
       alwaysEmitSelected: true
     };
   }

@@ -60,7 +60,7 @@ fdescribe('NodeComponent', () => {
 
     fixture.detectChanges();
 
-    component.toggleSelected();
+    component.checkBoxClick();
 
     fixture.detectChanges();
 

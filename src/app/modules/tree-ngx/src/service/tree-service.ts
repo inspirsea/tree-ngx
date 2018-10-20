@@ -172,6 +172,10 @@ export class TreeService {
     return false;
   }
 
+  public forceFilterTraverse() {
+    this.filterTraverse(this.treeState, this.filterValue);
+  }
+
   private setInitialSelectedState(nodeStates: NodeState[]) {
     for (let state of nodeStates) {
       if (!state.nodeItem.children && state.nodeItem.selected) {
