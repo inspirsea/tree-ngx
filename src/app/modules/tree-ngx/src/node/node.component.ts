@@ -41,7 +41,7 @@ export class NodeComponent implements OnChanges, AfterViewInit {
     }
   }
 
-  public toggleSelected() {
-    this.treeService.toggleSelected(this.state);
+  public checkBoxClick() {
+    this.treeService.checkBoxClick(this.state);
   }
 }

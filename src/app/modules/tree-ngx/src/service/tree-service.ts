@@ -76,6 +76,12 @@ export class TreeService {
     }
   }
 
+  public checkBoxClick(state: NodeState) {
+    if (this.options.mode !== TreeMode.HideSelected) {
+      this.toggleSelected(state);
+    }
+  }
+
   public nameClick(state: NodeState) {
     if (this.callbacks.nameClick) {
       this.callbacks.nameClick(state.nodeItem);
@@ -336,7 +342,15 @@ export class TreeService {
   }
 
   private filter(states: NodeState[], value: string) {
-    return states.filter(it => it.hasFilteredChildren || value === '' || it.nodeItem.name.toLowerCase().indexOf(value) !== -1);
+    return states.filter(it => {
+      if (this.options.mode === TreeMode.HideSelected && !it.selected) {
+        return false;
+      }
+
+      if ((it.hasFilteredChildren || value === '' || it.nodeItem.name.toLowerCase().indexOf(value) !== -1)) {
+        return true;
+      }
+    });
   }
 
   private filterTraverse(states: NodeState[], filter: string) {

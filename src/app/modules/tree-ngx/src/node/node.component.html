@@ -1,7 +1,7 @@
 <div class="node">
   <div class="node-container">
     <node-icon-wrapper [state]="state" [nodeCollapsibleTemplate]="nodeCollapsibleTemplate"></node-icon-wrapper>
-    <input #nodeCheckbox class="node-checkbox" *ngIf="state.showCheckBox" (click)="toggleSelected()" [disabled]="state.nodeItem?.children?.length == 0"
+    <input #nodeCheckbox class="node-checkbox" *ngIf="state.showCheckBox" (click)="checkBoxClick()" [disabled]="state.nodeItem?.children?.length == 0 || treeService.options.mode === 3"
       [checked]="state.selected" type="checkbox" />
     <node-name [state]="state" [nodeNameTemplate]="nodeNameTemplate"></node-name>
   </div>
