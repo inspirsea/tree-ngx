@@ -25,11 +25,11 @@ Callbacks
 
 ## Documentation
 
-View the full documentation at http://emilsunesson.com/code/tree-ngx-intro
+View the full documentation at http://emilsunesson.com/docs/tree-ngx/tree-ngx-intro
 
 ## Demo
 
-Live demo can be found in the documentation http://emilsunesson.com/code/tree-ngx-intro
+Live demo can be found in the documentation http://emilsunesson.com/docs/tree-ngx/tree-ngx-intro
 
 ## Installation
 
@@ -52,7 +52,7 @@ import { TreeNgxModule } from 'tree-ngx';
 ## Example
 
 How it looks with some minor style customization.
-See the working example at http://emilsunesson.com/code/tree-ngx-example.
+See the working example at http://emilsunesson.com/docs/tree-ngx/tree-ngx-example.
 
 <img src="https://raw.githubusercontent.com/inspirsea/tree-ngx/HEAD/assets/dark.png">
 <img src="https://raw.githubusercontent.com/inspirsea/tree-ngx/HEAD/assets/light.png">
