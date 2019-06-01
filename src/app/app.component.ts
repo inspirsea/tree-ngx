@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
 
     this.firstTreeoptions = {
       checkboxes: false,
-      mode: TreeMode.SingleSelect,
+      mode: TreeMode.MultiSelect,
       alwaysEmitSelected: false
     };
 

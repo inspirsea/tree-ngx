@@ -47,7 +47,6 @@
     "@angular/core": ">=6.0.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.13.8",
     "@angular/common": "^7.2.0",
     "@angular/compiler": "^7.2.0",
     "@angular/core": "^7.2.0",
@@ -56,10 +55,11 @@
     "@angular/platform-browser": "^7.2.0",
     "@angular/platform-browser-dynamic": "^7.2.0",
     "@angular/router": "^7.2.0",
-    "@angular-devkit/schematics": "0.0.34",
     "@angular/cli": "^7.2.0",
     "@angular/compiler-cli": "^7.2.0",
     "@angular/language-service": "^7.2.0",
+    "@angular-devkit/build-angular": "0.8.9",
+    "@angular-devkit/schematics": "0.8.8",
     "core-js": "^2.4.1",
     "rxjs": "^6.4.0",
     "zone.js": "^0.9.0",
