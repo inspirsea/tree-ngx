@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { TreeNgxModule, TreeNgxComponent } from './modules/tree-ngx';
+import { TreeNgxModule } from './modules/tree-ngx';
 
 @NgModule({
   declarations: [

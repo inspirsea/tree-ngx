@@ -18,16 +18,17 @@ import { TreeMode } from '../model/tree-mode';
 import { Subscription, timer } from 'rxjs';
 import { NodeState } from '../model/node-state';
 import { NodeSelectedState } from '../model/node-selected-state';
+import { TreeNgx } from '../model/tree-ngx';
+import { TreeUtil } from '../util/util';
 
 @Component({
   selector: 'tree-ngx',
   templateUrl: './tree-ngx.component.html',
   providers: [TreeService]
 })
-export class TreeNgxComponent implements OnInit, OnDestroy, OnChanges {
-
-  @ContentChild('nodeNameTemplate') nodeNameTemplate: TemplateRef<any>;
-  @ContentChild('nodeCollapsibleTemplate') nodeCollapsibleTemplate: TemplateRef<any>;
+export class TreeNgxComponent implements OnInit, OnDestroy, OnChanges, TreeNgx {
+  @ContentChild('nodeNameTemplate', { static: false }) nodeNameTemplate: TemplateRef<any>;
+  @ContentChild('nodeCollapsibleTemplate', { static: false }) nodeCollapsibleTemplate: TemplateRef<any>;
 
   private subscription: Subscription;
 
@@ -83,29 +84,37 @@ export class TreeNgxComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  public addNodeById(nodeItem: NodeItem<any>, id: string) {
-    let newNodeState = this.initState(null, nodeItem, this.options);
+  public addNodeById(nodeItem: NodeItem<any>, id?: string): void {
+    const newNodeState = TreeUtil.initState(null, nodeItem, this.options);
     this.treeService.addNodeById(newNodeState, id);
   }
 
-  public deleteById(id: string) {
+  public deleteById(id: string): void {
     this.treeService.deleteById(id);
   }
 
-  public editNameById(id: string, name: string) {
+  public editNameById(id: string, name: string): void {
     this.treeService.editNameById(id, name);
   }
 
-  public editItemById(id: string, item: any) {
+  public editItemById(id: string, item: any): void {
     this.treeService.editItemById(id, item);
   }
 
-  public expandAll() {
+  public getParentById(id: string): NodeItem<any> {
+    return this.treeService.getParentById(id);
+  }
+
+  public expandAll(): void {
     this.treeService.toggleExpanded(true);
   }
 
-  public collapseAll() {
+  public collapseAll(): void {
     this.treeService.toggleExpanded(false);
+  }
+
+  public expandById(id: string): void {
+    this.treeService.expandById(id);
   }
 
   public initialize() {
@@ -123,7 +132,7 @@ export class TreeNgxComponent implements OnInit, OnDestroy, OnChanges {
 
     for (let nodeItem of nodeItems) {
 
-      let nodeState = this.initState(parent, nodeItem, options);
+      const nodeState = TreeUtil.initState(parent, nodeItem, options);
 
       if (nodeItem.children) {
         nodeState.children = this.initTreeStructure(nodeState, nodeItem.children, options);
@@ -141,50 +150,6 @@ export class TreeNgxComponent implements OnInit, OnDestroy, OnChanges {
       this.treeService.options = { ...this.options, checkboxes: false };
     } else {
       this.treeService.options = { ...this.options };
-    }
-  }
-
-  private initState(parent: NodeState, nodeItem: NodeItem<any>, options: TreeOptions) {
-
-    let nodeState: NodeState = {
-      parent: parent,
-      children: [],
-      filteredChildren: [],
-      hasFilteredChildren: false,
-      nodeItem: nodeItem,
-      expanded: nodeItem.expanded === false ? false : true,
-      markSelected: this.getMarkSelected(nodeItem, options),
-      collapseVisible: this.getCollapseVisible(nodeItem),
-      selectedState: NodeSelectedState.unChecked,
-      selected: false,
-      showCheckBox: this.getCheckBoxVisible(nodeItem, options)
-    };
-
-    return nodeState;
-  }
-
-  private getMarkSelected(nodeItem: NodeItem<any>, options: TreeOptions) {
-    if (!nodeItem.children && !options.checkboxes) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  private getCheckBoxVisible(nodeItem: NodeItem<any>, options: TreeOptions) {
-    if (nodeItem.children && this.treeService.options.mode === TreeMode.SingleSelect
-      || !this.treeService.options.checkboxes) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  private getCollapseVisible(nodeItem: NodeItem<any>) {
-    if (nodeItem.children) {
-      return true;
-    } else {
-      return false;
     }
   }
 }

@@ -1,4 +1,4 @@
-<div (click)="nameClick()" [class.markSelected]="state.markSelected && state.selected" class="node-name">
+<div (click)="nameClick()" [class.markSelected]="state.markSelected && state.selected" [class.nodeDisabled]="state.disabled" class="node-name">
   <ng-container *ngIf="!nodeNameTemplate">
     <span [class.active]="active">{{state.nodeItem.name}}</span>
   </ng-container>

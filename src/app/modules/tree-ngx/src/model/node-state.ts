@@ -7,9 +7,9 @@ export interface NodeState {
     filteredChildren: NodeState[];
     hasFilteredChildren: boolean;
     nodeItem: NodeItem<any>;
+    disabled: boolean;
     expanded: boolean;
     markSelected: boolean;
-    collapseVisible: boolean;
     selectedState: NodeSelectedState;
     selected: boolean;
     showCheckBox: boolean;

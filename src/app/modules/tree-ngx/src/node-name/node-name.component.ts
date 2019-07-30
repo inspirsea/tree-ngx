@@ -29,8 +29,4 @@ export class NodeNameComponent implements OnChanges {
   public delete() {
     this.treeService.deleteByState(this.state);
   }
-
-  public toggleExpand() {
-    this.state.expanded = !this.state.expanded;
-  }
 }

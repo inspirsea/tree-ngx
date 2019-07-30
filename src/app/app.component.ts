@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { TreeNgxComponent, NodeItem, TreeCallbacks, TreeOptions, TreeMode } from './modules/tree-ngx';
+import { TreeNgx, NodeItem, TreeCallbacks, TreeOptions, TreeMode } from './modules/tree-ngx';
 
 @Component({
   selector: 'app-root',
@@ -8,8 +8,8 @@ import { TreeNgxComponent, NodeItem, TreeCallbacks, TreeOptions, TreeMode } from
 })
 export class AppComponent implements OnInit {
 
-  @ViewChild('firstTreeRef') firstTreeRef: TreeNgxComponent;
-  @ViewChild('secondTreeRef') secondTreeRef: TreeNgxComponent;
+  @ViewChild('firstTreeRef', { static: false }) firstTreeRef: TreeNgx;
+  @ViewChild('secondTreeRef', { static: false }) secondTreeRef: TreeNgx;
 
   public firstTree: NodeItem<string>[] = [];
   public firstTreecallbacks: TreeCallbacks;
@@ -44,12 +44,12 @@ export class AppComponent implements OnInit {
     ];
 
     setTimeout(() => {
-      this.firstTree = [this.createTree()];  
-    }, 3000);
-    
+      this.firstTree = [this.createTree()];
+    }, 500);
+
 
     this.firstTreeoptions = {
-      checkboxes: false,
+      checkboxes: true,
       mode: TreeMode.MultiSelect,
       alwaysEmitSelected: false
     };
@@ -115,7 +115,8 @@ export class AppComponent implements OnInit {
             id: (++id).toString(),
             name: 'Grandchildren_' + i + '_' + j + '_' + z,
             item: 'gchild' + i + '_' + j + '_' + z,
-            selected: i === 0 ? true : false
+            selected: i === 0 ? true : false,
+            disabled: false
           });
         }
 
@@ -130,7 +131,13 @@ export class AppComponent implements OnInit {
           id: (++id).toString(),
           name: 'Child_' + i + '_' + j,
           item: { name: 'superitem' },
-          children: []
+          children: [{
+            id: 'item',
+            name: 'child',
+            item: 'childwubwubwid',
+            selected: false,
+            disabled: true
+          }]
         });
       }
 

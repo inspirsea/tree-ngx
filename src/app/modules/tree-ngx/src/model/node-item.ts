@@ -5,4 +5,5 @@ export interface NodeItem<T> {
     children?: NodeItem<any>[];
     selected?: boolean;
     expanded?: boolean;
+    disabled?: boolean;
 }

@@ -1,8 +1,32 @@
 import { NodeItem } from './node-item';
 
 export interface TreeCallbacks {
-    nameClick?: (item: NodeItem<any>) => void;
-    select?: (item: NodeItem<any>) => void;
-    unSelect?: (item: NodeItem<any>) => void;
-    toggle?: (item: NodeItem<any>) => void;
+
+  /**
+  *
+  * Callback triggers on name click.
+  *
+  */
+  nameClick?: (item: NodeItem<any>) => void;
+
+  /**
+  *
+  * Callback triggers on node selection.
+  *
+  */
+  select?: (item: NodeItem<any>) => void;
+
+  /**
+  *
+  * Callback triggers on unselection of a node.
+  *
+  */
+  unSelect?: (item: NodeItem<any>) => void;
+
+  /**
+  *
+  *  Callback triggers on toggling of a node.
+  *
+  */
+  toggle?: (item: NodeItem<any>) => void;
 }

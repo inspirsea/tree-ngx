@@ -7,6 +7,7 @@ import { NodeSelectedState } from '../model/node-selected-state';
 import { TreeMode } from '../model/tree-mode';
 import { TreeOptions } from '../model/tree-options';
 import { TreeCallbacks } from '../model/tree-callbacks';
+import { TreeUtil } from '../util/util';
 
 @Injectable()
 export class TreeService {
@@ -30,37 +31,49 @@ export class TreeService {
 
   public toggleSelected(state: NodeState) {
 
-    this.toggleSelectedState(state);
+    this.toggleSelectedState(state, false);
 
     if (this.callbacks.toggle) {
       this.callbacks.toggle(state.nodeItem);
     }
   }
 
-  public toggleSelectedState(state) {
-    if (this.options.mode !== TreeMode.NoSelect) {
-      if (state.selectedState === NodeSelectedState.unChecked) {
-        if (this.options.mode === TreeMode.SingleSelect) {
-          this.clear();
-        }
-        this.setChecked(state, true);
-      } else if (state.selectedState === NodeSelectedState.checked
-        || state.selectedState === NodeSelectedState.indeterminate) {
-        this.setUnchecked(state, true);
-      }
+  public toggleSelectedState(state, ignoreDisabled: boolean) {
+    if (this.isDisabled(state, ignoreDisabled)) {
+      return;
+    }
 
-      if (state.parent) {
-        this.childStateChanged(state.parent);
+    if (state.selectedState === NodeSelectedState.unChecked) {
+      if (this.options.mode === TreeMode.SingleSelect) {
+        this.clear();
+        this.setChecked(state, false, true, ignoreDisabled);
+      } else {
+        this.setChecked(state, true, false, ignoreDisabled);
+      }
+    } else if (state.selectedState === NodeSelectedState.checked) {
+      if (this.options.mode === TreeMode.SingleSelect) {
+        this.setUnchecked(state, false, true, ignoreDisabled);
+      } else {
+        this.setUnchecked(state, true, false, ignoreDisabled);
+      }
+    } else {
+      if (this.anyActiveSelected(state) && !state.selected) {
+        this.setUnchecked(state, true, false, ignoreDisabled);
+      } else {
+        this.setChecked(state, true, false, ignoreDisabled);
       }
     }
 
+    if (state.parent && this.options.mode !== TreeMode.SingleSelect) {
+      this.childStateChanged(state.parent);
+    }
   }
 
   public setInitialState() {
     this.setInitialSelectedState(this.treeState);
   }
 
-  public childStateChanged(state) {
+  public childStateChanged(state: NodeState) {
     if (this.anyChildSelected(state)) {
       if (this.allChildrenSelected(state)) {
         this.setChecked(state, false);
@@ -107,21 +120,23 @@ export class TreeService {
   }
 
   public addNodeById(nodeState: NodeState, id: string) {
-    let result = this.getNodeItem(this.treeState, id, this.findById);
+    let result = this.getNodeState(this.treeState, id, this.findById);
 
     if (result) {
-      if (result.children) {
-        nodeState.parent = result;
-        result.children.push(nodeState);
-        result.nodeItem.children.push(nodeState.nodeItem);
-        this.childStateChanged(result);
-        this.filterTraverse(this.treeState, this.filterValue);
+      if (!result.children) {
+        result.children = [];
+      }
+
+      this.addNewNode(nodeState, result);
+
+      if (result.nodeItem.item && this.options.mode === TreeMode.MultiSelect) {
+        this.removeSelected(result.nodeItem.item);
       }
     }
   }
 
   public editNameById(id: string, name: string) {
-    const nodeState = this.getNodeItem(this.treeState, id, this.findById);
+    const nodeState = this.getNodeState(this.treeState, id, this.findById);
 
     if (nodeState && nodeState.nodeItem) {
       nodeState.nodeItem.name = name;
@@ -129,7 +144,7 @@ export class TreeService {
   }
 
   public editItemById(id: string, item: any) {
-    const nodeState = this.getNodeItem(this.treeState, id, this.findById);
+    const nodeState = this.getNodeState(this.treeState, id, this.findById);
 
     if (nodeState && nodeState.nodeItem) {
       if (this.selectedItems.includes(nodeState.nodeItem.item)) {
@@ -137,13 +152,13 @@ export class TreeService {
         this.selectedItems.push(item);
         this.selectedItemsSubject.next(this.selectedItems);
       }
-      
+
       nodeState.nodeItem.item = item;
     }
   }
 
   public deleteById(id: string) {
-    let result = this.getNodeItem(this.treeState, id, this.findById);
+    let result = this.getNodeState(this.treeState, id, this.findById);
     if (result) {
       this.deleteByState(result);
     }
@@ -155,6 +170,25 @@ export class TreeService {
     this.filterTraverse(this.treeState, this.filterValue);
   }
 
+  public expandById(id: string) {
+    const result = this.getNodeState(this.treeState, id, this.findById);
+
+    if (result) {
+      this.toggleExpandedTraverseAsc(result, true);
+    }
+  }
+
+  public reEvaluateSelectedState(state: NodeState): void {
+    if (this.options.mode !== TreeMode.SingleSelect) {
+      if (!this.hasNoChildren(state)) {
+        this.childStateChanged(state);
+        for (const child of state.children) {
+          this.reEvaluateSelectedState(child);
+        }
+      }
+    }
+  }
+
   public filterChanged(value: string) {
     this.filterValue = value;
     this.filterChangeSubject.next(value);
@@ -162,9 +196,7 @@ export class TreeService {
 
   public canToggleChildrenOnName(state: NodeState) {
     if (this.options.checkboxes === false) {
-      if (this.options.mode === TreeMode.SingleSelect && !state.nodeItem.children) {
-        return true;
-      } else if (this.options.mode === TreeMode.MultiSelect) {
+      if (this.options.mode === TreeMode.SingleSelect || this.options.mode === TreeMode.MultiSelect) {
         return true;
       }
     }
@@ -172,15 +204,32 @@ export class TreeService {
     return false;
   }
 
+  public getParentById(id: string): NodeItem<any> {
+    const result = this.getNodeState(this.treeState, id, this.findById);
+
+    if (result) {
+      return result.parent.nodeItem;
+    }
+
+    return null;
+  }
+
   public forceFilterTraverse() {
     this.filterTraverse(this.treeState, this.filterValue);
   }
 
   private setInitialSelectedState(nodeStates: NodeState[]) {
-    for (let state of nodeStates) {
-      if (!state.nodeItem.children && state.nodeItem.selected) {
-        this.toggleSelectedState(state);
+    for (const state of nodeStates) {
+      if (this.options.mode === TreeMode.MultiSelect) {
+        if (state.nodeItem.selected && (!state.children || state.children.length === 0)) {
+          this.toggleSelectedState(state, true);
+        }
+      } else {
+        if (state.nodeItem.selected) {
+          this.toggleSelectedState(state, true);
+        }
       }
+
       this.setInitialSelectedState(state.children);
     }
   }
@@ -219,6 +268,24 @@ export class TreeService {
     }
   }
 
+  private isDisabled(state: NodeState, ignoreDisabled: boolean): boolean {
+    return (this.options.mode === TreeMode.NoSelect || (state.disabled && !ignoreDisabled));
+  }
+
+  private addNewNode(nodeState: NodeState, parent: NodeState): void {
+    nodeState.parent = parent;
+    parent.children.push(nodeState);
+    parent.nodeItem.children.push(nodeState.nodeItem);
+
+    parent.markSelected = TreeUtil.getMarkSelected(parent.nodeItem, this.options);
+
+    if (this.options.mode === TreeMode.MultiSelect) {
+      this.childStateChanged(parent);
+    }
+
+    this.filterTraverse(this.treeState, this.filterValue);
+  }
+
   private remove(state: NodeState) {
     if (state.parent) {
       state.parent.hasFilteredChildren = false;
@@ -251,11 +318,23 @@ export class TreeService {
       && state.children.length === state.nodeItem.children.length;
   }
 
-  private setUnchecked(state: NodeState, propogate: boolean) {
+  private toggleExpandedTraverseAsc(nodeState: NodeState, value: boolean): void {
+    nodeState.expanded = value;
+
+    if (nodeState.parent) {
+      this.toggleExpandedTraverseAsc(nodeState.parent, value);
+    }
+  }
+
+  private setUnchecked(state: NodeState, propogate: boolean, force?: boolean, ignoreDisabled?: boolean) {
+    if (state.disabled && !ignoreDisabled) {
+      return;
+    }
+
     state.selectedState = NodeSelectedState.unChecked;
     state.selected = false;
 
-    if (!state.nodeItem.children) {
+    if (this.hasNoChildren(state) || force) {
       this.removeSelected(state.nodeItem.item);
 
       if (this.options.alwaysEmitSelected === true) {
@@ -266,31 +345,47 @@ export class TreeService {
         this.callbacks.unSelect(state.nodeItem);
       }
 
-    } else {
-      if (propogate === true) {
-        for (let child of state.children) {
-          this.setUnchecked(child, propogate);
-        }
+    } else if (propogate === true) {
+      for (const child of state.children) {
+        this.setUnchecked(child, propogate, force, ignoreDisabled);
       }
     }
   }
 
   private setIndeterminate(state) {
     state.selectedState = NodeSelectedState.indeterminate;
-    state.selected = true;
+    state.selected = false;
   }
 
-  private setChecked(state: NodeState, propogate: boolean) {
+  private anyActiveSelected(state: NodeState): boolean {
+    let result = state.children.filter(it => !it.disabled && it.selected).length > 0;
+
+    for (const child of state.children) {
+      if (!this.hasNoChildren(child) && this.anyActiveSelected(child)) {
+        result = true;
+      }
+    }
+
+    return result;
+  }
+
+  private hasNoChildren(state: NodeState): boolean {
+    return (!state.children || state.children.length === 0);
+  }
+
+  private setChecked(state: NodeState, propogate: boolean, force?: boolean, ignoreDisabled?: boolean) {
+    if (state.disabled && !ignoreDisabled) {
+      return;
+    }
+
     state.selectedState = NodeSelectedState.checked;
     state.selected = true;
 
-    if (!state.nodeItem.children) {
+    if (this.hasNoChildren(state) || force) {
       this.addSelected(state);
-    } else {
-      if (propogate === true) {
-        for (let child of state.children) {
-          this.setChecked(child, propogate);
-        }
+    } else if (propogate === true) {
+      for (const child of state.children) {
+        this.setChecked(child, propogate, force, ignoreDisabled);
       }
     }
   }
@@ -319,14 +414,14 @@ export class TreeService {
     return state.nodeItem.id === arg;
   }
 
-  private getNodeItem(nodeStates: NodeState[], arg: any, compare: (state: NodeState, find: any) => boolean) {
+  private getNodeState(nodeStates: NodeState[], arg: any, compare: (state: NodeState, find: any) => boolean) {
     let result = nodeStates.find(it => compare(it, arg));
 
     if (result) {
       return result;
     } else {
       for (let state of nodeStates) {
-        result = this.getNodeItem(state.children, arg, compare);
+        result = this.getNodeState(state.children, arg, compare);
         if (result) {
           return result;
         }

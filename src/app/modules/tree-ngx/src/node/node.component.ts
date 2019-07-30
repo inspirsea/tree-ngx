@@ -10,7 +10,7 @@ import { TreeService } from '../service/tree-service';
 })
 export class NodeComponent implements OnChanges, AfterViewInit {
 
-  @ViewChild('nodeCheckbox') nodeCheckbox: ElementRef;
+  @ViewChild('nodeCheckbox', { static: false }) nodeCheckbox: ElementRef;
 
   @Input() state: NodeState;
   @Input() selectedState: NodeSelectedState;
@@ -38,10 +38,20 @@ export class NodeComponent implements OnChanges, AfterViewInit {
       } else {
         this.nodeCheckbox.nativeElement.indeterminate = false;
       }
+
+      if (this.selectedState === NodeSelectedState.checked) {
+        this.nodeCheckbox.nativeElement.checked = true;
+      } else if (this.selectedState === NodeSelectedState.unChecked) {
+        this.nodeCheckbox.nativeElement.checked = false;
+      }
     }
   }
 
   public checkBoxClick() {
     this.treeService.checkBoxClick(this.state);
+
+    setTimeout(() => {
+      this.treeService.reEvaluateSelectedState(this.state);
+    }, 1);
   }
 }

@@ -1,6 +1,6 @@
 export enum TreeMode {
-    NoSelect,
-    SingleSelect,
-    MultiSelect,
-    HideSelected
+  NoSelect,
+  SingleSelect,
+  MultiSelect,
+  HideSelected
 }

@@ -41,9 +41,9 @@ fdescribe('NodeComponent', () => {
       filteredChildren: [],
       hasFilteredChildren: false,
       nodeItem: { id: '88', name: 'Grandchildren_0_8_0', item: 'gchild0_8_0', selected: true },
+      disabled: false,
       expanded: true,
       markSelected: true,
-      collapseVisible: false,
       selectedState: 1,
       selected: false,
       showCheckBox: false
