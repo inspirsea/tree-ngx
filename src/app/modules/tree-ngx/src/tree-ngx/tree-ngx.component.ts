@@ -17,7 +17,6 @@ import { TreeCallbacks } from '../model/tree-callbacks';
 import { TreeMode } from '../model/tree-mode';
 import { Subscription, timer } from 'rxjs';
 import { NodeState } from '../model/node-state';
-import { NodeSelectedState } from '../model/node-selected-state';
 import { TreeNgx } from '../model/tree-ngx';
 import { TreeUtil } from '../util/util';
 
