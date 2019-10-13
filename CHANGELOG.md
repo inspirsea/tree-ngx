@@ -1,3 +1,9 @@
+<a name="3.1.0"></a>
+# [3.1.0] (2019-10-13)
+
+* Added toggleById.
+* Added collapseById.
+
 <a name="3.0.0"></a>
 # [3.0.0] (2019-08-01)
 
