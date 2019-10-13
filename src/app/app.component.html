@@ -1,6 +1,9 @@
 <div>
   <button (click)="addNode()">addNode</button>
   <button (click)="deleteNode()">deleteNode</button>
+  <button (click)="selectNode()">toggleNode</button>
+  <button (click)="expandById()">expandId</button>
+  <button (click)="collapseById()">collapseId</button>
   <input type="text" [(ngModel)]="currentId">
   <button (click)="firstTreeRef.expandAll()">ExpandAll</button>
   <button (click)="firstTreeRef.collapseAll()">CollapseAll</button>

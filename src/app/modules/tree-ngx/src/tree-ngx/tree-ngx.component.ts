@@ -116,6 +116,14 @@ export class TreeNgxComponent implements OnInit, OnDestroy, OnChanges, TreeNgx {
     this.treeService.expandById(id);
   }
 
+  public collapseById(id: string): void {
+    this.treeService.collapseById(id);
+  }
+
+  public toggleById(id: string): void {
+    this.treeService.toggleById(id);
+  }
+
   public initialize() {
     this.setOptions();
     this.treeService.callbacks = this.callbacks;

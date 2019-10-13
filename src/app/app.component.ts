@@ -73,6 +73,10 @@ export class AppComponent implements OnInit {
     };
   }
 
+  public selectNode() {
+    this.firstTreeRef.toggleById(this.currentId);
+  }
+
   public selecedItemsChanged(items: any[]) {
     this.firstSelectedItems = items;
   }
@@ -83,6 +87,14 @@ export class AppComponent implements OnInit {
 
   public editNodeItem() {
     this.firstTreeRef.editItemById(this.currentId, 'item');
+  }
+
+  public expandById() {
+    this.firstTreeRef.expandById(this.currentId);
+  }
+
+  public collapseById() {
+    this.firstTreeRef.collapseById(this.currentId);
   }
 
   public addNode() {

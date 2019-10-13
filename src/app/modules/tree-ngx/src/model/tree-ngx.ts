@@ -39,6 +39,20 @@ export interface TreeNgx {
   expandById(id: string): void;
 
   /**
+   * Collapse specified node.
+   *
+   * @param id - Id of the node
+   */
+  collapseById(id: string): void;
+
+  /**
+   * Toggle selected state of the node.
+   *
+   * @param id - Id of the node
+   */
+  toggleById(id: string): void;
+
+  /**
   * Get the parent of a node.
   *
   * @param id - Id of the node

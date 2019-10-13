@@ -30,7 +30,6 @@ export class TreeService {
   }
 
   public toggleSelected(state: NodeState) {
-
     this.toggleSelectedState(state, false);
 
     if (this.callbacks.toggle) {
@@ -135,6 +134,14 @@ export class TreeService {
     }
   }
 
+  public toggleById(id: string) {
+    let result = this.getNodeState(this.treeState, id, this.findById);
+
+    if (result) {
+      this.toggleSelected(result);
+    }
+  }
+
   public editNameById(id: string, name: string) {
     const nodeState = this.getNodeState(this.treeState, id, this.findById);
 
@@ -175,6 +182,14 @@ export class TreeService {
 
     if (result) {
       this.toggleExpandedTraverseAsc(result, true);
+    }
+  }
+
+  public collapseById(id: string) {
+    const result = this.getNodeState(this.treeState, id, this.findById);
+
+    if (result) {
+      result.expanded = false;
     }
   }
 
