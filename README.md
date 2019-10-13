@@ -56,6 +56,7 @@ See the working example at http://emilsunesson.com/docs/tree-ngx/tree-ngx-exampl
 
 <img src="https://raw.githubusercontent.com/inspirsea/tree-ngx/HEAD/assets/dark.png">
 <img src="https://raw.githubusercontent.com/inspirsea/tree-ngx/HEAD/assets/light.png">
+<img src="https://raw.githubusercontent.com/inspirsea/tree-ngx/HEAD/assets/dark_checkbox.png">
 
 ### Template
 
