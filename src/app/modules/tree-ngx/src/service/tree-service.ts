@@ -99,7 +99,7 @@ export class TreeService {
       this.callbacks.nameClick(state.nodeItem);
     }
 
-    if (this.canToggleChildrenOnName(state)) {
+    if (this.canToggleChildrenOnName()) {
       this.toggleSelected(state);
     }
   }
@@ -134,7 +134,7 @@ export class TreeService {
     }
   }
 
-  public toggleById(id: string) {
+  public selectById(id: string) {
     let result = this.getNodeState(this.treeState, id, this.findById);
 
     if (result) {
@@ -209,7 +209,7 @@ export class TreeService {
     this.filterChangeSubject.next(value);
   }
 
-  public canToggleChildrenOnName(state: NodeState) {
+  public canToggleChildrenOnName() {
     if (this.options.checkboxes === false) {
       if (this.options.mode === TreeMode.SingleSelect || this.options.mode === TreeMode.MultiSelect) {
         return true;

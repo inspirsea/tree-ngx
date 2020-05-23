@@ -1,3 +1,9 @@
+<a name="4.0.0"></a>
+# [4.0.0] (2020-05-23)
+
+* Tested with angular 9.
+* Changed name of method toggleById to selectById
+
 <a name="3.1.0"></a>
 # [3.1.0] (2019-10-13)
 

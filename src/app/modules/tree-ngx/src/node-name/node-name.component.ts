@@ -18,7 +18,7 @@ export class NodeNameComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.state) {
-      this.active = this.treeService.canToggleChildrenOnName(this.state);
+      this.active = this.treeService.canToggleChildrenOnName();
     }
   }
 

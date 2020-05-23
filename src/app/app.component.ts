@@ -74,7 +74,7 @@ export class AppComponent implements OnInit {
   }
 
   public selectNode() {
-    this.firstTreeRef.toggleById(this.currentId);
+    this.firstTreeRef.selectById(this.currentId);
   }
 
   public selecedItemsChanged(items: any[]) {
