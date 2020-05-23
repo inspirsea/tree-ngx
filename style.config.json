@@ -1,4 +1,0 @@
-{
-  "entry": "./src/app/modules/tree-ngx/src/scss/main.scss",
-  "dest": "dist/style/ngx-tree.scss"
-}

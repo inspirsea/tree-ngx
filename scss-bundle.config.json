@@ -1,0 +1,7 @@
+{
+  "bundlerOptions": {
+    "entryFile": "./src/app/modules/tree-ngx/src/scss/main.scss",
+    "rootDir": "./src/app/modules/tree-ngx/src/scss",
+    "outFile": "dist/style/ngx-tree.scss"
+  }
+}

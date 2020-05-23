@@ -38,7 +38,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "bundle": "ng-packagr -p ng-package.json && npm run bundle-styles && npm run bundle-assets",
-    "bundle-styles": "scss-bundle -c style.config.json",
+    "bundle-styles": "scss-bundle -c scss-bundle.config.json",
     "bundle-assets": "cp -r assets dist"
   },
   "private": false,
