@@ -4,7 +4,7 @@
 # tree-ngx
 
 ## Introduction
-Tree-ngx is a treeview component. Its made to be usable with minimal implementation as well as being highly customizable.
+Tree-ngx is a treeview component that can easily handle thousands of nodes. It's made to be used with minimal implementation as well as being highly customizable.
 Made with flexbox, and the default style is easy to override.
 
 If you find a bug or have a feature request please open a Github issue.
