@@ -1,3 +1,15 @@
+<a name="4.3.0"></a>
+# [4.3.0] (2022-02-16)
+
+* Rewrote the build pipeline and removed dependencies
+
+
+<a name="4.2.0"></a>
+# [4.2.0] (2022-02-16)
+
+* All build dependencies updated
+* Tested with angular 13.
+
 <a name="4.1.0"></a>
 # [4.1.0] (2021-08-23)
 

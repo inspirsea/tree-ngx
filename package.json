@@ -1,7 +1,7 @@
 {
   "name": "tree-ngx",
   "description": "A highly customizable Angular Tree Component, usable with minimal implementation.",
-  "version": "4.1.0",
+  "version": "4.3.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/inspirsea/tree-ngx.git"
@@ -37,28 +37,28 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "bundle": "ng-packagr -p ng-package.json && npm run bundle-styles && npm run bundle-assets",
-    "bundle-styles": "scss-bundle -c scss-bundle.config.json",
-    "bundle-assets": "cp -r assets dist"
+    "bundle": "ng-packagr -p ng-package.json"
   },
   "private": false,
-  "peerDependencies": {
-    "@angular/common": ">=6.0.0",
-    "@angular/core": ">=6.0.0"
+  "exports": {
+    ".": {
+      "sass": "./scss/main.scss"
+    }
   },
+  "peerDependencies": {},
   "devDependencies": {
-    "@angular-devkit/build-angular": "12.1.0",
-    "@angular/animations": "12.1.0",
-    "@angular/cli": "12.1.0",
-    "@angular/common": "12.1.0",
-    "@angular/compiler": "12.1.0",
-    "@angular/compiler-cli": "12.1.0",
-    "@angular/core": "12.1.0",
-    "@angular/forms": "12.1.0",
-    "@angular/language-service": "12.1.0",
-    "@angular/platform-browser": "12.1.0",
-    "@angular/platform-browser-dynamic": "12.1.0",
-    "@angular/router": "12.1.0",
+    "@angular-devkit/build-angular": "^13.2.3",
+    "@angular/animations": "13.2.2",
+    "@angular/cli": "13.2.3",
+    "@angular/common": "13.2.2",
+    "@angular/compiler": "13.2.2",
+    "@angular/compiler-cli": "13.2.2",
+    "@angular/core": "13.2.2",
+    "@angular/forms": "13.2.2",
+    "@angular/language-service": "13.2.2",
+    "@angular/platform-browser": "13.2.2",
+    "@angular/platform-browser-dynamic": "13.2.2",
+    "@angular/router": "13.2.2",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~14.0.5",
@@ -68,13 +68,12 @@
     "karma-coverage-istanbul-reporter": "~2.1.0",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
-    "ng-packagr": "12.1.0",
+    "ng-packagr": "13.2.1",
     "rxjs": "~6.6.0",
-    "scss-bundle": "~3.1.2",
     "ts-node": "~8.3.0",
     "tslib": "^2.2.0",
     "tslint": "~6.1.0",
-    "typescript": "~4.3.2",
+    "typescript": "~4.5.5",
     "zone.js": "~0.11.4"
   }
 }

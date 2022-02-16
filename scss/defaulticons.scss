@@ -1,0 +1,24 @@
+.arrow-down {
+  position: absolute;
+  width: 0;
+  height: 0;
+  left: 3px;
+  top: 6px;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 7px solid #455A64;
+  &.collapse-empty {
+    border-top: 7px solid #ccc;
+  }
+}
+
+.arrow-right {
+  position: absolute;
+  width: 0;
+  height: 0;
+  left: 8px;
+  top: 3px;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-left: 7px solid #455A64;
+}

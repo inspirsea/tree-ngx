@@ -1,6 +1,11 @@
 {
-    "$schema": "./node_modules/ng-packagr/ng-package.schema.json",
-    "lib": {
-      "entryFile": "src/app/modules/tree-ngx/index.ts"
-    }
+  "$schema": "./node_modules/ng-packagr/package.schema.json",
+  "assets": [
+    "CHANGELOG.md",
+    "./assets/*",
+    "./scss/**/*.scss"
+  ],
+  "lib": {
+    "entryFile": "src/app/modules/tree-ngx/index.ts"
   }
+}

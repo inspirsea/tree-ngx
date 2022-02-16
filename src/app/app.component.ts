@@ -182,4 +182,9 @@ export class AppComponent implements OnInit {
   private onUnselect(item: NodeItem<any>) {
     console.log('unselect');
   }
+
+  SelectedItem(item: any) {
+
+    console.log(item);
+  }
 }

@@ -37,9 +37,13 @@ Live demo can be found in the documentation http://emilsunesson.com/docs/tree-ng
 $> npm install tree-ngx --save
 ```
 
+### Include default style
+
 ```sh
-@import '~tree-ngx/style/ngx-tree.scss';
+@import 'tree-ngx';
 ```
+
+### Include module
 
 ```sh
 import { TreeNgxModule } from 'tree-ngx';
